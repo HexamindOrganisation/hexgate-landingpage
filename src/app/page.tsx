@@ -156,7 +156,7 @@ function Nav() {
           <a href="#frameworks">Frameworks</a>
           <a href="#features">Capabilities</a>
           <a href="#code">Quickstart</a>
-          <a href="https://github.com/HexamindOrganisation/hexgate" target="_blank" rel="noopener">
+          <a href="https://docs.hexgate.ai" target="_blank" rel="noopener">
             Docs
           </a>
         </div>
