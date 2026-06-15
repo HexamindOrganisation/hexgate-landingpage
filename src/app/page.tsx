@@ -577,7 +577,7 @@ export default function Home() {
               <img
                 className="fwlogo"
                 src="https://cdn.jsdelivr.net/npm/simple-icons@14/icons/openai.svg"
-                alt="OpenAI"
+                alt="OpenAI Agents framework — supported by Hexgate"
                 width={18}
                 height={18}
                 loading="lazy"
@@ -588,7 +588,7 @@ export default function Home() {
               <img
                 className="fwlogo"
                 src="https://cdn.jsdelivr.net/npm/simple-icons@14/icons/langchain.svg"
-                alt="LangChain"
+                alt="LangChain and LangGraph — supported by Hexgate"
                 width={18}
                 height={18}
                 loading="lazy"
@@ -599,7 +599,7 @@ export default function Home() {
               <img
                 className="fwlogo"
                 src="https://cdn.jsdelivr.net/npm/simple-icons@14/icons/google.svg"
-                alt="Google"
+                alt="Google ADK — supported by Hexgate"
                 width={18}
                 height={18}
                 loading="lazy"
@@ -610,7 +610,7 @@ export default function Home() {
               <img
                 className="fwlogo"
                 src="https://cdn.jsdelivr.net/npm/simple-icons@14/icons/pydantic.svg"
-                alt="Pydantic"
+                alt="Pydantic AI — supported by Hexgate"
                 width={18}
                 height={18}
                 loading="lazy"
