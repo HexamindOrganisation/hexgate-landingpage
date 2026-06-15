@@ -27,6 +27,24 @@ const VLABEL: Record<Verdict, string> = { allow: "ALLOW", deny: "DENY", hold: "A
 const VCLASS: Record<Verdict, string> = { allow: "v-allow", deny: "v-deny", hold: "v-hold" };
 const MAX_ROWS = 5;
 
+const GATE_PATHS: Record<Verdict, string> = {
+  allow: "M190,220 H500 C586,220 660,88 798,88",
+  hold: "M190,220 H798",
+  deny: "M190,220 H500 C586,220 660,352 798,352",
+};
+
+type GateEvent = { tool: string; verdict: Verdict };
+const GATE_SEQ: GateEvent[] = [
+  { tool: "read_file", verdict: "allow" },
+  { tool: "refund_order", verdict: "allow" },
+  { tool: "wire_transfer", verdict: "hold" },
+  { tool: "delete_user", verdict: "deny" },
+  { tool: "web_search", verdict: "allow" },
+  { tool: "export_pii", verdict: "hold" },
+  { tool: "issue_credit", verdict: "allow" },
+  { tool: "edit_file", verdict: "deny" },
+];
+
 function HexMark() {
   return (
     <svg className="mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
@@ -101,7 +119,7 @@ function LiveFeed() {
     if (!feed) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    const push = () => {
+    const push = (instant: boolean) => {
       const ev = EVENTS[indexRef.current % EVENTS.length];
       indexRef.current += 1;
 
@@ -112,25 +130,333 @@ function LiveFeed() {
         `<span class="role">${ev.role}</span>` +
         `<span class="call"><span class="tool">${ev.tool}</span><span class="args">(${ev.args})</span>${reason}</span>` +
         `<span class="verdict ${VCLASS[ev.verdict]}"><span class="vd"></span>${VLABEL[ev.verdict]}</span>`;
-      if (!reduce) row.classList.add("entering");
-      feed.appendChild(row);
-      if (!reduce) {
-        requestAnimationFrame(() =>
-          requestAnimationFrame(() => row.classList.remove("entering"))
-        );
+
+      if (!reduce && !instant) {
+        row.classList.add("entering");
+        feed.appendChild(row);
+        window.setTimeout(() => row.classList.remove("entering"), 30);
+      } else {
+        feed.appendChild(row);
       }
+
       while (feed.children.length > MAX_ROWS) {
         feed.removeChild(feed.firstChild!);
       }
     };
 
-    for (let s = 0; s < MAX_ROWS; s += 1) push();
+    for (let s = 0; s < MAX_ROWS; s += 1) push(true);
     if (reduce) return;
-    const id = window.setInterval(push, 2100);
+    const id = window.setInterval(() => push(false), 2100);
     return () => window.clearInterval(id);
   }, []);
 
   return <div className="feed" ref={feedRef} />;
+}
+
+function GateDiagram() {
+  const stageRef = useRef<HTMLDivElement>(null);
+  const scalerRef = useRef<HTMLDivElement>(null);
+  const gateRef = useRef<HTMLDivElement>(null);
+  const outAllowRef = useRef<HTMLDivElement>(null);
+  const outHoldRef = useRef<HTMLDivElement>(null);
+  const outDenyRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const stage = stageRef.current;
+    const scaler = scalerRef.current;
+    if (!stage || !scaler) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const fit = () => {
+      const w = stage.clientWidth;
+      const s = Math.min(1, w / 1000);
+      scaler.style.transform = `scale(${s})`;
+      stage.style.height = `${440 * s}px`;
+    };
+    fit();
+    window.addEventListener("resize", fit, { passive: true });
+
+    if (reduce) {
+      for (const v of ["allow", "hold", "deny"] as const) {
+        const node = { allow: outAllowRef, hold: outHoldRef, deny: outDenyRef }[v].current;
+        const c = node?.querySelector(".ocount");
+        if (c) c.textContent = "1 total";
+      }
+      return () => window.removeEventListener("resize", fit);
+    }
+
+    const counts: Record<Verdict, number> = { allow: 0, hold: 0, deny: 0 };
+    const DUR = 2600;
+    const timeouts = new Set<number>();
+    const packets = new Set<HTMLDivElement>();
+    let k = 0;
+
+    const schedule = (fn: () => void, ms: number) => {
+      const id = window.setTimeout(() => {
+        timeouts.delete(id);
+        fn();
+      }, ms);
+      timeouts.add(id);
+      return id;
+    };
+
+    const spawn = () => {
+      const ev = GATE_SEQ[k % GATE_SEQ.length];
+      k += 1;
+
+      const p = document.createElement("div");
+      p.className = "packet";
+      p.textContent = `${ev.tool}()`;
+      p.style.offsetPath = `path("${GATE_PATHS[ev.verdict]}")`;
+      p.style.setProperty("--dur", `${DUR}ms`);
+      scaler.appendChild(p);
+      packets.add(p);
+
+      schedule(() => p.classList.add("run"), 30);
+
+      schedule(() => {
+        p.classList.add(`v-${ev.verdict}`);
+        const gate = gateRef.current;
+        if (gate) {
+          gate.classList.add("scanning");
+          schedule(() => gate.classList.remove("scanning"), 280);
+        }
+      }, DUR * 0.5);
+
+      schedule(() => {
+        const node = { allow: outAllowRef, hold: outHoldRef, deny: outDenyRef }[ev.verdict].current;
+        if (node) {
+          node.classList.add("hit");
+          counts[ev.verdict] += 1;
+          const c = node.querySelector(".ocount");
+          if (c) c.textContent = `${counts[ev.verdict]} total`;
+          schedule(() => node.classList.remove("hit"), 440);
+        }
+      }, DUR * 0.92);
+
+      schedule(() => {
+        p.remove();
+        packets.delete(p);
+      }, DUR + 150);
+    };
+
+    spawn();
+    const interval = window.setInterval(spawn, 1500);
+
+    return () => {
+      window.removeEventListener("resize", fit);
+      window.clearInterval(interval);
+      for (const id of timeouts) window.clearTimeout(id);
+      for (const p of packets) p.remove();
+    };
+  }, []);
+
+  return (
+    <div
+      className="gate-stage"
+      ref={stageRef}
+      aria-label="Animated diagram: an agent tool call passing through the policy gate to an allow, approval, or deny decision"
+    >
+      <div className="gate-scaler" ref={scalerRef}>
+        <div className="gate-caption">
+          <span>Tool call</span>
+          <span>Real-time evaluation</span>
+          <span>Typed decision</span>
+        </div>
+        <svg className="gate-wires" viewBox="0 0 1000 440" preserveAspectRatio="none" aria-hidden="true">
+          <path className="wire wire-base" d="M190,220 H500 C586,220 660,88 798,88" />
+          <path className="wire wire-base" d="M190,220 H500 C586,220 660,352 798,352" />
+          <path className="wire wire-allow" d="M504,220 C586,220 660,88 798,88" />
+          <path className="wire wire-deny" d="M504,220 C586,220 660,352 798,352" />
+          <path className="wire wire-hold" d="M504,220 H798" />
+          <path className="wire wire-trunk flow" d="M190,220 H496" />
+        </svg>
+
+        <div className="gnode gn-agent">
+          <div className="ghead">
+            <span className="gdot" />
+            <span className="gname">Agent</span>
+          </div>
+          <span className="gsub">emitting tool calls</span>
+        </div>
+
+        <div className="gnode gn-gate" ref={gateRef}>
+          <div className="hexwrap">
+            <svg className="hexsvg" viewBox="0 0 168 188" aria-hidden="true">
+              <polygon className="hexfill" points="84,4 164,48 164,140 84,184 4,140 4,48" />
+              <polygon className="hexstroke" points="84,4 164,48 164,140 84,184 4,140 4,48" />
+            </svg>
+            <div className="scanline" />
+            <div className="gatelabel">
+              <span className="glabel-k">POLICY GATE</span>
+              <span className="glabel-fn">decide()</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="gnode gn-out out-allow" ref={outAllowRef}>
+          <div className="obadge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20 6 9 17l-5-5" />
+            </svg>
+          </div>
+          <div className="otext">
+            <span className="olabel">ALLOW</span>
+            <span className="ocount">0 total</span>
+          </div>
+        </div>
+        <div className="gnode gn-out out-hold" ref={outHoldRef}>
+          <div className="obadge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 7v5l3 2" />
+            </svg>
+          </div>
+          <div className="otext">
+            <span className="olabel">APPROVAL</span>
+            <span className="ocount">0 total</span>
+          </div>
+        </div>
+        <div className="gnode gn-out out-deny" ref={outDenyRef}>
+          <div className="obadge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
+          </div>
+          <div className="otext">
+            <span className="olabel">DENY</span>
+            <span className="ocount">0 total</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FaqChevron() {
+  return (
+    <svg className="faq-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  );
+}
+
+type FaqItem = { q: string; body: React.ReactNode };
+const FAQS: FaqItem[] = [
+  {
+    q: "Do I have to rewrite my agent?",
+    body: (
+      <p>
+        No. Hexgate ships adapters that wrap an existing <b>OpenAI Agents</b>, <b>LangChain / LangGraph</b>, <b>Google ADK</b>, or <b>Pydantic AI</b> agent without touching its logic — swap your runner for <code>HexgateRunner</code> (or call <code>wrap_langchain_agent</code> / <code>wrap_pydantic_agent</code>) once. Your original agent object is left intact; the wrapper holds the policy and gates every tool the agent can invoke.
+      </p>
+    ),
+  },
+  {
+    q: "Does gating every call add latency or a network round-trip?",
+    body: (
+      <p>
+        No per-decision round-trip. Policy is evaluated <b>in-process</b> — by the default pydantic engine, or in production by a compiled WASM bundle run via <code>wasmtime</code>. The bundle is fetched once and refreshed only at turn boundaries with an <code>ETag</code> / <code>304</code> check, so individual <code>decide()</code> calls never leave the process.
+      </p>
+    ),
+  },
+  {
+    q: "What happens when a call is denied?",
+    body: (
+      <p>
+        A denial isn&apos;t a crash. The tool returns a <code>[policy_denied]</code> (or <code>[approval_required]</code>) marker that the model sees as the tool result, so the agent can recover or try a fallback instead of aborting the run. On Pydantic AI it surfaces as a <code>ModelRetry</code>; on LangChain as a structured <code>{`{ok: false}`}</code> result.
+      </p>
+    ),
+  },
+  {
+    q: "How do approval-required tools work?",
+    body: (
+      <p>
+        Mark a tool <code>approval_required</code> in policy, then pass an <code>approval_handler</code> when you wrap: <code>True</code> (auto-approve), <code>False</code> (auto-deny), or a sync/async <code>(action, context) -&gt; bool</code> callback that inspects the specific call. <code>hexgate chat</code> prompts the terminal, <code>hexgate serve</code> auto-approves, and native code does whatever you wire.
+      </p>
+    ),
+  },
+  {
+    q: "How does per-user scope work if one agent serves everyone?",
+    body: (
+      <p>
+        Identity and rules are decoupled. A per-request <code>User</code> context manager carries <em>who</em> is calling (<code>user_id</code>, <code>role</code>, <code>session_id</code>, optional <code>ttl</code>) as a signed biscuit token; role policy files decide <em>what</em> that role can do. Role is resolved at call time from a contextvar, so a single wrapped agent serves many users concurrently without seeing each other&apos;s policies.
+      </p>
+    ),
+  },
+  {
+    q: "What does a policy actually look like?",
+    body: (
+      <>
+        <p>
+          A <code>policy.yaml</code> is deny-by-default with a <code>tools</code> map; each tool gets a mode (<code>allow</code> / <code>deny</code> / <code>approval_required</code>) and optional constraints like <code>args.amount &lt;= 500</code>. Operators are <code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code>, <code>&gt;=</code>, <code>in</code>, <code>not in</code>, all ANDed.
+        </p>
+        <p>
+          The same constraint strings compile to OPA Rego for the WASM engine and run in-process for pydantic — a parity test suite proves both produce identical decisions.
+        </p>
+      </>
+    ),
+  },
+  {
+    q: "What makes a production bundle trustworthy?",
+    body: (
+      <p>
+        Bundles are signed. The manifest carries a SHA-256 of every artifact (including the <code>wasm_hash</code>) plus a detached <b>Ed25519</b> signature over that manifest — the hashes authenticate the files, the signature authenticates the manifest. Set <code>HEXGATE_BUNDLE_REQUIRE_SIGNATURE=true</code> to refuse anything unsigned or unverifiable. The signing key is the same root that signs your biscuit tokens.
+      </p>
+    ),
+  },
+  {
+    q: "Do I need the platform, or can I run the SDK alone?",
+    body: (
+      <p>
+        The SDK runs standalone — YAML on disk, in-process enforcement, no Docker or browser. The optional platform (a FastAPI control plane + React dashboard) adds browser policy editing, mintable tokens, a live Playground decision stream, and an append-only audit log in ClickHouse. Edit policy in the UI and the next turn picks it up.
+      </p>
+    ),
+  },
+];
+
+function Faq() {
+  return (
+    <div className="faq-list">
+      {FAQS.map((item, i) => (
+        <details className="faq-item" name="faq" key={item.q}>
+          <summary>
+            <span className="faq-n">{String(i + 1).padStart(2, "0")}</span>
+            <span className="faq-q">{item.q}</span>
+            <FaqChevron />
+          </summary>
+          <div className="faq-body">{item.body}</div>
+        </details>
+      ))}
+    </div>
+  );
+}
+
+function AuditConsole() {
+  return (
+    <div className="console" style={{ maxWidth: 920, margin: "0 auto" }} aria-label="Live policy decision stream">
+      <div className="console-top">
+        <div className="dots">
+          <i />
+          <i />
+          <i />
+        </div>
+        <span className="fn">
+          <b>PolicyEnforcer</b>.decide(role, tool, args)
+        </span>
+        <span className="live">
+          <span className="blink" /> live
+        </span>
+      </div>
+      <LiveFeed />
+      <div className="console-bottom">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" />
+        </svg>
+        every decision streamed to the audit log
+      </div>
+    </div>
+  );
 }
 
 function Nav() {
@@ -154,8 +480,10 @@ function Nav() {
         </a>
         <div className="nav-links">
           <a href="#frameworks">Frameworks</a>
+          <a href="#audit">Audit log</a>
           <a href="#features">Capabilities</a>
           <a href="#code">Quickstart</a>
+          <a href="#faq">FAQ</a>
           <a href="https://docs.hexgate.ai" target="_blank" rel="noopener">
             Docs
           </a>
@@ -191,82 +519,53 @@ export default function Home() {
         <div className="glow" />
         <div className="grid-bg" />
         <div className="wrap">
-          <div className="hero-grid">
-            <div className="hero-copy">
-              <span className="pill">
-                <span className="dot" /> Enforced locally · <b>zero added latency</b>
-              </span>
-              <h1>
-                Control what your agents&nbsp;do.
-                <br />
-                <span className="accent">Not just what they&nbsp;say.</span>
-              </h1>
-              <p className="lede">
-                Guardrails stop at the prompt. Hexgate governs what your agents actually <b>do</b> —
-                every tool call and resource access, allowed, denied, or held for approval. The policy
-                is enforced <b>locally from a signed bundle</b>, so fine-grained control costs you nothing
-                on the critical path.
-              </p>
-              <div className="cta-row">
-                <CopyInstall id="copyBtn" />
-                <a className="btn btn-primary" href="#book">
-                  Book a demo
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M5 12h14M13 6l6 6-6 6" />
-                  </svg>
-                </a>
-              </div>
-              <div className="trust">
-                <span>
-                  <span className="tk">MIT</span> licensed
-                </span>
-                <span>
-                  <span className="tk">●</span> No per-call round-trips
-                </span>
-                <span>
-                  <span className="tk">●</span> Ed25519 signed bundles
-                </span>
-              </div>
-            </div>
-
-            <div className="console" aria-label="Live policy decision stream">
-              <div className="console-top">
-                <div className="dots">
-                  <i />
-                  <i />
-                  <i />
-                </div>
-                <span className="fn">
-                  <b>PolicyEnforcer</b>.decide(role, tool, args)
-                </span>
-                <span className="live">
-                  <span className="blink" /> live
-                </span>
-              </div>
-              <LiveFeed />
-              <div className="console-bottom">
+          <div className="hero-lead">
+            <span className="pill">
+              <span className="dot" /> Enforced locally · <b>zero added latency</b>
+            </span>
+            <h1>
+              Control what your agents&nbsp;do.
+              <br />
+              <span className="accent">Not just what they&nbsp;say.</span>
+            </h1>
+            <p className="lede">
+              Guardrails stop at the prompt. Hexgate governs what your agents actually <b>do</b> —
+              every tool call and resource access, allowed, denied, or held for approval. The policy
+              is enforced <b>locally from a signed bundle</b>, so fine-grained control costs you nothing
+              on the critical path.
+            </p>
+            <div className="cta-row">
+              <CopyInstall id="copyBtn" />
+              <a className="btn btn-primary" href="#book">
+                Book a demo
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth="2"
+                  strokeWidth="2.2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 >
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                  <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" />
+                  <path d="M5 12h14M13 6l6 6-6 6" />
                 </svg>
-                every decision streamed to the audit log
-              </div>
+              </a>
+            </div>
+            <div className="trust">
+              <span>
+                <span className="tk">MIT</span> licensed
+              </span>
+              <span>
+                <span className="tk">●</span> No per-call round-trips
+              </span>
+              <span>
+                <span className="tk">●</span> Ed25519 signed bundles
+              </span>
             </div>
           </div>
+        </div>
+
+        <div className="wrap">
+          <GateDiagram />
         </div>
       </header>
 
@@ -320,6 +619,20 @@ export default function Home() {
             </span>
             <span className="fw native">+ any native runtime</span>
           </div>
+        </div>
+      </section>
+
+      <section className="block" id="audit" style={{ paddingTop: 40, paddingBottom: 0 }}>
+        <div className="wrap">
+          <div className="sec-head">
+            <span className="eyebrow">Live audit feed</span>
+            <h2>Every decision, on the record.</h2>
+            <p>
+              Past the gate, each verdict streams to an append-only log — the caller&apos;s role, the
+              tool, the outcome, and the exact constraint behind it.
+            </p>
+          </div>
+          <AuditConsole />
         </div>
       </section>
 
@@ -541,6 +854,17 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="block" id="faq">
+        <div className="wrap">
+          <div className="sec-head center">
+            <span className="eyebrow">FAQ</span>
+            <h2>Questions, answered.</h2>
+            <p>The short version of how Hexgate behaves in a real codebase.</p>
+          </div>
+          <Faq />
+        </div>
+      </section>
+
       <section className="final" id="book">
         <div className="glow" />
         <div className="wrap">
@@ -596,9 +920,16 @@ export default function Home() {
               </a>
               <a href="#frameworks">Frameworks</a>
               <a href="#features">Capabilities</a>
+              <a href="#faq">FAQ</a>
               <a href="#book">Book a demo</a>
             </div>
-            <span className="foot-meta">© 2026 Hexamind · MIT</span>
+            <span className="foot-meta">
+              ©&nbsp;2026{" "}
+              <a href="https://hexamind.ai" target="_blank" rel="noopener">
+                Hexamind
+              </a>{" "}
+              · MIT
+            </span>
           </div>
         </div>
       </footer>

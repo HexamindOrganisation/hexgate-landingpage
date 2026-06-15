@@ -34,8 +34,6 @@
     --blue-bright: #60a5fa;
     --blue-deep: #1d4ed8;
     --blue-soft: rgba(59,130,246,0.14);
-    --cyan: #22d3ee;
-    --cyan-soft: rgba(34,211,238,0.14);
 
     --allow: #2dd4a7;
     --allow-bg: rgba(45,212,167,0.12);
@@ -331,26 +329,6 @@
   .step h4 { font-family: var(--display); font-weight: 600; font-size: 1.08rem; margin-bottom: 7px; }
   .step p { color: var(--tx-1); font-size: 0.96rem; line-height: 1.5; }
 
-  /* ---------- FAQ ---------- */
-  .faq-list { max-width: 860px; margin: 0 auto; border-top: 1px solid var(--line); }
-  .faq-item { border-bottom: 1px solid var(--line); }
-  .faq-item summary {
-    list-style: none; cursor: pointer; display: flex; align-items: center; gap: 20px;
-    padding: 24px 6px; font-family: var(--display); font-weight: 600;
-    font-size: 1.2rem; letter-spacing: -0.01em; color: var(--tx);
-    transition: color .15s ease;
-  }
-  .faq-item summary::-webkit-details-marker { display: none; }
-  .faq-item summary:hover { color: var(--blue-bright); }
-  .faq-n { font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--tx-3); min-width: 28px; }
-  .faq-q { flex: 1; }
-  .faq-ico { flex: none; width: 18px; height: 18px; color: var(--tx-2); transition: transform .25s ease, color .15s ease; }
-  .faq-item[open] .faq-ico { transform: rotate(180deg); color: var(--blue-bright); }
-  .faq-body { padding: 0 6px 26px 54px; }
-  .faq-body p { color: var(--tx-1); font-size: 1.02rem; line-height: 1.64; max-width: 730px; }
-  .faq-body p + p { margin-top: 12px; }
-  .faq-body code { font-family: var(--mono); font-size: 0.84em; color: var(--blue-bright); background: rgba(59,130,246,0.1); padding: 1px 6px; border-radius: 5px; }
-
   /* final CTA */
   .final { position: relative; padding: 104px 0; overflow: hidden; }
   .final .glow { top: auto; bottom: -640px; opacity: 0.8; }
@@ -369,107 +347,6 @@
   .foot-links a:hover { color: var(--tx); }
   .foot-meta { color: var(--tx-3); font-size: 13px; font-family: var(--mono); }
 
-  /* ---------- HERO LEAD (centered) ---------- */
-  .hero-lead { position: relative; z-index: 1; max-width: 880px; margin: 0 auto; text-align: center; }
-  .hero-lead .lede { margin-left: auto; margin-right: auto; max-width: 660px; }
-  .hero-lead .cta-row { justify-content: center; margin-bottom: 18px; }
-  .hero-lead .trust { justify-content: center; }
-  .hero-lead .pill { margin-bottom: 24px; }
-
-  /* ---------- HERO GATE DIAGRAM ---------- */
-  .gate-stage { position: relative; z-index: 1; width: 100%; margin-top: 58px; overflow: hidden; }
-  .gate-scaler { position: relative; width: 1000px; height: 440px; margin: 0 auto; transform-origin: top center; }
-
-  .gate-caption {
-    position: absolute; top: 0; left: 0; width: 1000px;
-    display: flex; justify-content: space-between; align-items: baseline;
-    font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em;
-    text-transform: uppercase; color: var(--tx-3);
-  }
-
-  .gate-wires { position: absolute; left: 0; top: 0; width: 1000px; height: 440px; overflow: visible; pointer-events: none; }
-  .wire { fill: none; stroke-width: 1.5; }
-  .wire-base { stroke: rgba(255,255,255,0.06); }
-  .wire-allow { stroke: rgba(45,212,167,0.24); }
-  .wire-hold  { stroke: rgba(245,165,36,0.22); }
-  .wire-deny  { stroke: rgba(244,86,107,0.22); }
-  .wire-trunk { stroke: rgba(96,165,250,0.5); stroke-width: 2; }
-  .flow { stroke-dasharray: 4 10; animation: dashflow 1.1s linear infinite; }
-  @keyframes dashflow { to { stroke-dashoffset: -28; } }
-
-  .gnode { position: absolute; z-index: 3; }
-
-  /* agent */
-  .gn-agent {
-    left: 24px; top: 168px; width: 162px; height: 104px;
-    border: 1px solid var(--line-2); border-radius: 14px;
-    background: linear-gradient(180deg, var(--panel-2), var(--panel));
-    display: flex; flex-direction: column; justify-content: center; gap: 8px;
-    padding: 0 18px; box-shadow: 0 20px 44px -26px rgba(0,0,0,0.9);
-  }
-  .gn-agent .ghead { display: flex; align-items: center; gap: 9px; }
-  .gn-agent .gdot { width: 9px; height: 9px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 10px var(--cyan); animation: pulseDot 1.6s ease-in-out infinite; }
-  @keyframes pulseDot { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .4; transform: scale(.8); } }
-  .gn-agent .gname { font-family: var(--display); font-weight: 600; font-size: 16px; letter-spacing: -0.01em; }
-  .gn-agent .gsub { font-family: var(--mono); font-size: 11px; color: var(--tx-2); line-height: 1.4; }
-
-  /* gate hexagon */
-  .gn-gate { left: 396px; top: 110px; width: 208px; height: 220px; display: grid; place-items: center; }
-  .gn-gate::before { content: ''; position: absolute; left: 50%; top: 50%; width: 260px; height: 260px; transform: translate(-50%,-50%); background: radial-gradient(circle, rgba(96,165,250,0.16), transparent 62%); pointer-events: none; }
-  .hexwrap { position: relative; width: 168px; height: 188px; display: grid; place-items: center; }
-  .hexsvg { position: absolute; inset: 0; width: 168px; height: 188px; overflow: visible; }
-  .hexfill { fill: rgba(13,17,25,0.94); }
-  .hexstroke { fill: none; stroke: var(--blue-bright); stroke-width: 1.6; filter: drop-shadow(0 0 7px rgba(96,165,250,0.5)); transition: stroke .2s ease, filter .2s ease; }
-  .gn-gate.scanning .hexstroke { stroke: var(--cyan); filter: drop-shadow(0 0 16px rgba(34,211,238,0.85)); }
-  .scanline { position: absolute; left: 16px; right: 16px; top: 50%; height: 2px; margin-top: -1px; background: linear-gradient(90deg, transparent, var(--cyan), transparent); box-shadow: 0 0 12px var(--cyan); opacity: .55; animation: scan 2.4s ease-in-out infinite; }
-  @keyframes scan { 0%,100% { transform: translateY(-62px); } 50% { transform: translateY(62px); } }
-  .gatelabel { position: relative; z-index: 2; text-align: center; display: flex; flex-direction: column; gap: 5px; }
-  .glabel-k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; color: var(--blue-bright); }
-  .glabel-fn { font-family: var(--display); font-weight: 600; font-size: 17px; }
-
-  /* outcomes */
-  .gn-out {
-    left: 800px; width: 168px; height: 70px;
-    border: 1px solid var(--line); border-radius: 12px; background: var(--panel);
-    display: flex; align-items: center; gap: 12px; padding: 0 15px;
-    transition: border-color .25s ease, box-shadow .25s ease, transform .25s ease;
-  }
-  .gn-out .obadge { width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center; flex: none; }
-  .gn-out .obadge svg { width: 17px; height: 17px; }
-  .gn-out .otext { display: flex; flex-direction: column; }
-  .gn-out .olabel { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; font-weight: 700; }
-  .gn-out .ocount { font-family: var(--mono); font-size: 10.5px; color: var(--tx-2); margin-top: 3px; }
-  .out-allow { top: 53px; } .out-hold { top: 185px; } .out-deny { top: 317px; }
-  .out-allow .obadge { background: var(--allow-bg); color: var(--allow); } .out-allow .olabel { color: var(--allow); }
-  .out-hold  .obadge { background: var(--hold-bg);  color: var(--hold);  } .out-hold .olabel  { color: var(--hold); }
-  .out-deny  .obadge { background: var(--deny-bg);  color: var(--deny);  } .out-deny .olabel  { color: var(--deny); }
-  .out-allow.hit { border-color: var(--allow); box-shadow: 0 0 0 1px var(--allow), 0 0 28px -8px var(--allow); transform: translateX(3px); }
-  .out-hold.hit  { border-color: var(--hold);  box-shadow: 0 0 0 1px var(--hold),  0 0 28px -8px var(--hold);  transform: translateX(3px); }
-  .out-deny.hit  { border-color: var(--deny);  box-shadow: 0 0 0 1px var(--deny),  0 0 28px -8px var(--deny);  transform: translateX(3px); }
-
-  /* packets */
-  .packet {
-    position: absolute; left: 0; top: 0; z-index: 2;
-    offset-anchor: 50% 50%; offset-rotate: 0deg;
-    font-family: var(--mono); font-size: 11px; font-weight: 500; white-space: nowrap;
-    padding: 4px 9px; border-radius: 7px; color: var(--tx);
-    background: var(--cyan-soft); border: 1px solid rgba(34,211,238,0.55);
-    box-shadow: 0 0 16px -3px rgba(34,211,238,0.6);
-    will-change: offset-distance, opacity;
-  }
-  .packet.v-allow { background: var(--allow-bg); border-color: var(--allow); box-shadow: 0 0 16px -3px var(--allow); color: var(--allow); }
-  .packet.v-deny  { background: var(--deny-bg);  border-color: var(--deny);  box-shadow: 0 0 16px -3px var(--deny);  color: var(--deny); }
-  .packet.v-hold  { background: var(--hold-bg);  border-color: var(--hold);  box-shadow: 0 0 16px -3px var(--hold);  color: var(--hold); }
-  .packet.run { animation: pkt var(--dur, 2.6s) cubic-bezier(.6,.04,.38,1) forwards; }
-  @keyframes pkt {
-    0%   { offset-distance: 0%;   opacity: 0; }
-    7%   { opacity: 1; }
-    44%  { offset-distance: 50%; }
-    56%  { offset-distance: 50%; }
-    90%  { opacity: 1; }
-    100% { offset-distance: 100%; opacity: 0; }
-  }
-
   /* ---------- RESPONSIVE ---------- */
   @media (max-width: 940px) {
     .hero-grid { grid-template-columns: 1fr; gap: 44px; }
@@ -486,8 +363,6 @@
     .install { font-size: 13.5px; }
     .trust { gap: 12px; }
     .nav-cta .btn-ghost { display: none; }
-    .faq-item summary { font-size: 1.06rem; gap: 14px; }
-    .faq-body { padding-left: 28px; }
   }
   @media (prefers-reduced-motion: reduce) {
     .row { animation: none; }
@@ -496,16 +371,6 @@
 </style>
 </head>
 <body>
-
-<template id="__bundler_thumbnail" data-bg-color="#08090d">
-  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
-    <rect width="1200" height="800" fill="#08090d"/>
-    <circle cx="600" cy="400" r="300" fill="#3b82f6" opacity="0.12"/>
-    <polygon points="600,180 790,290 790,510 600,620 410,510 410,290" fill="rgba(13,17,25,0.9)" stroke="#60a5fa" stroke-width="6"/>
-    <polygon points="600,275 712,340 712,460 600,525 488,460 488,340" fill="none" stroke="#22d3ee" stroke-width="5"/>
-    <circle cx="600" cy="400" r="26" fill="#60a5fa"/>
-  </svg>
-</template>
 
 <nav id="nav">
   <div class="nav-inner">
@@ -519,10 +384,8 @@
     </a>
     <div class="nav-links">
       <a href="#frameworks">Frameworks</a>
-      <a href="#audit">Audit log</a>
       <a href="#features">Capabilities</a>
       <a href="#code">Quickstart</a>
-      <a href="#faq">FAQ</a>
       <a href="https://github.com/HexamindOrganisation/hexgate" target="_blank" rel="noopener">Docs</a>
     </div>
     <div class="nav-cta">
@@ -540,72 +403,39 @@
   <div class="glow"></div>
   <div class="grid-bg"></div>
   <div class="wrap">
-    <div class="hero-lead">
-      <span class="pill"><span class="dot"></span> Enforced locally · <b>zero added latency</b></span>
-      <h1>Control what your agents&nbsp;do.<br /><span class="accent">Not just what they&nbsp;say.</span></h1>
-      <p class="lede">Guardrails stop at the prompt. Hexgate governs what your agents actually <b>do</b> — every tool call and resource access, allowed, denied, or held for approval. The policy is enforced <b>locally from a signed bundle</b>, so fine-grained control costs you nothing on the critical path.</p>
-      <div class="cta-row">
-        <div class="install">
-          <span><span class="prompt">$</span> pip install <span class="pkg">hexgate</span></span>
-          <button class="copy-btn" id="copyBtn" aria-label="Copy install command">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          </button>
-        </div>
-        <a class="btn btn-primary" href="#book">Book a demo
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-      </div>
-      <div class="trust">
-        <span><span class="tk">MIT</span> licensed</span>
-        <span><span class="tk">●</span> No per-call round-trips</span>
-        <span><span class="tk">●</span> Ed25519 signed bundles</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="wrap">
-    <div class="gate-stage" aria-label="Animated diagram: an agent tool call passing through the policy gate to an allow, approval, or deny decision">
-      <div class="gate-scaler">
-        <div class="gate-caption"><span>Tool call</span><span>Real-time evaluation</span><span>Typed decision</span></div>
-        <svg class="gate-wires" viewBox="0 0 1000 440" preserveAspectRatio="none" aria-hidden="true">
-          <path class="wire wire-base" d="M190,220 H500 C586,220 660,88 798,88"/>
-          <path class="wire wire-base" d="M190,220 H500 C586,220 660,352 798,352"/>
-          <path class="wire wire-allow" d="M504,220 C586,220 660,88 798,88"/>
-          <path class="wire wire-deny" d="M504,220 C586,220 660,352 798,352"/>
-          <path class="wire wire-hold" d="M504,220 H798"/>
-          <path class="wire wire-trunk flow" d="M190,220 H496"/>
-        </svg>
-
-        <div class="gnode gn-agent">
-          <div class="ghead"><span class="gdot"></span><span class="gname">Agent</span></div>
-          <span class="gsub">emitting tool calls</span>
-        </div>
-
-        <div class="gnode gn-gate" id="gate">
-          <div class="hexwrap">
-            <svg class="hexsvg" viewBox="0 0 168 188" aria-hidden="true">
-              <polygon class="hexfill" points="84,4 164,48 164,140 84,184 4,140 4,48"/>
-              <polygon class="hexstroke" points="84,4 164,48 164,140 84,184 4,140 4,48"/>
-            </svg>
-            <div class="scanline"></div>
-            <div class="gatelabel">
-              <span class="glabel-k">POLICY GATE</span>
-              <span class="glabel-fn">decide()</span>
-            </div>
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <span class="pill"><span class="dot"></span> Enforced locally · <b>zero added latency</b></span>
+        <h1>Control what your agents&nbsp;do.<br /><span class="accent">Not just what they&nbsp;say.</span></h1>
+        <p class="lede">Guardrails stop at the prompt. Hexgate governs what your agents actually <b>do</b> — every tool call and resource access, allowed, denied, or held for approval. The policy is enforced <b>locally from a signed bundle</b>, so fine-grained control costs you nothing on the critical path.</p>
+        <div class="cta-row">
+          <div class="install">
+            <span><span class="prompt">$</span> pip install <span class="pkg">hexgate</span></span>
+            <button class="copy-btn" id="copyBtn" aria-label="Copy install command">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </button>
           </div>
+          <a class="btn btn-primary" href="#book">Book a demo
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
         </div>
+        <div class="trust">
+          <span><span class="tk">MIT</span> licensed</span>
+          <span><span class="tk">●</span> No per-call round-trips</span>
+          <span><span class="tk">●</span> Ed25519 signed bundles</span>
+        </div>
+      </div>
 
-        <div class="gnode gn-out out-allow" id="out-allow">
-          <div class="obadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
-          <div class="otext"><span class="olabel">ALLOW</span><span class="ocount">0 total</span></div>
+      <div class="console" aria-label="Live policy decision stream">
+        <div class="console-top">
+          <div class="dots"><i></i><i></i><i></i></div>
+          <span class="fn"><b>PolicyEnforcer</b>.decide(role, tool, args)</span>
+          <span class="live"><span class="blink"></span> live</span>
         </div>
-        <div class="gnode gn-out out-hold" id="out-hold">
-          <div class="obadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
-          <div class="otext"><span class="olabel">APPROVAL</span><span class="ocount">0 total</span></div>
-        </div>
-        <div class="gnode gn-out out-deny" id="out-deny">
-          <div class="obadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></div>
-          <div class="otext"><span class="olabel">DENY</span><span class="ocount">0 total</span></div>
+        <div class="feed" id="feed"></div>
+        <div class="console-bottom">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+          every decision streamed to the audit log
         </div>
       </div>
     </div>
@@ -621,28 +451,6 @@
       <span class="fw"><img class="fwlogo" src="https://cdn.jsdelivr.net/npm/simple-icons@14/icons/google.svg" alt="Google" width="18" height="18" loading="lazy" /> Google ADK</span>
       <span class="fw"><img class="fwlogo" src="https://cdn.jsdelivr.net/npm/simple-icons@14/icons/pydantic.svg" alt="Pydantic" width="18" height="18" loading="lazy" /> Pydantic AI</span>
       <span class="fw native">+ any native runtime</span>
-    </div>
-  </div>
-</section>
-
-<section class="block" id="audit" style="padding-top: 40px; padding-bottom: 0;">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="eyebrow">Live audit feed</span>
-      <h2>Every decision, on the record.</h2>
-      <p>Past the gate, each verdict streams to an append-only log — the caller's role, the tool, the outcome, and the exact constraint behind it.</p>
-    </div>
-    <div class="console" style="max-width: 920px; margin: 0 auto;" aria-label="Live policy decision stream">
-      <div class="console-top">
-        <div class="dots"><i></i><i></i><i></i></div>
-        <span class="fn"><b>PolicyEnforcer</b>.decide(role, tool, args)</span>
-        <span class="live"><span class="blink"></span> live</span>
-      </div>
-      <div class="feed" id="feed"></div>
-      <div class="console-bottom">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
-        every decision streamed to the audit log
-      </div>
     </div>
   </div>
 </section>
@@ -750,76 +558,6 @@ runner = <span class="c-fn">HexgateRunner</span>()
   </div>
 </section>
 
-<section class="block" id="faq">
-  <div class="wrap">
-    <div class="sec-head center">
-      <span class="eyebrow">FAQ</span>
-      <h2>Questions, answered.</h2>
-      <p>The short version of how Hexgate behaves in a real codebase.</p>
-    </div>
-    <div class="faq-list">
-
-      <details class="faq-item" name="faq">
-        <summary><span class="faq-n">01</span><span class="faq-q">Do I have to rewrite my agent?</span><svg class="faq-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></summary>
-        <div class="faq-body">
-          <p>No. Hexgate ships adapters that wrap an existing <b>OpenAI Agents</b>, <b>LangChain / LangGraph</b>, <b>Google ADK</b>, or <b>Pydantic AI</b> agent without touching its logic — swap your runner for <code>HexgateRunner</code> (or call <code>wrap_langchain_agent</code> / <code>wrap_pydantic_agent</code>) once. Your original agent object is left intact; the wrapper holds the policy and gates every tool the agent can invoke.</p>
-        </div>
-      </details>
-
-      <details class="faq-item" name="faq">
-        <summary><span class="faq-n">02</span><span class="faq-q">Does gating every call add latency or a network round-trip?</span><svg class="faq-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></summary>
-        <div class="faq-body">
-          <p>No per-decision round-trip. Policy is evaluated <b>in-process</b> — by the default pydantic engine, or in production by a compiled WASM bundle run via <code>wasmtime</code>. The bundle is fetched once and refreshed only at turn boundaries with an <code>ETag</code> / <code>304</code> check, so individual <code>decide()</code> calls never leave the process.</p>
-        </div>
-      </details>
-
-      <details class="faq-item" name="faq">
-        <summary><span class="faq-n">03</span><span class="faq-q">What happens when a call is denied?</span><svg class="faq-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></summary>
-        <div class="faq-body">
-          <p>A denial isn't a crash. The tool returns a <code>[policy_denied]</code> (or <code>[approval_required]</code>) marker that the model sees as the tool result, so the agent can recover or try a fallback instead of aborting the run. On Pydantic AI it surfaces as a <code>ModelRetry</code>; on LangChain as a structured <code>{ok: false}</code> result.</p>
-        </div>
-      </details>
-
-      <details class="faq-item" name="faq">
-        <summary><span class="faq-n">04</span><span class="faq-q">How do approval-required tools work?</span><svg class="faq-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></summary>
-        <div class="faq-body">
-          <p>Mark a tool <code>approval_required</code> in policy, then pass an <code>approval_handler</code> when you wrap: <code>True</code> (auto-approve), <code>False</code> (auto-deny), or a sync/async <code>(action, context) -&gt; bool</code> callback that inspects the specific call. <code>hexgate chat</code> prompts the terminal, <code>hexgate serve</code> auto-approves, and native code does whatever you wire.</p>
-        </div>
-      </details>
-
-      <details class="faq-item" name="faq">
-        <summary><span class="faq-n">05</span><span class="faq-q">How does per-user scope work if one agent serves everyone?</span><svg class="faq-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></summary>
-        <div class="faq-body">
-          <p>Identity and rules are decoupled. A per-request <code>User</code> context manager carries <em>who</em> is calling (<code>user_id</code>, <code>role</code>, <code>session_id</code>, optional <code>ttl</code>) as a signed biscuit token; role policy files decide <em>what</em> that role can do. Role is resolved at call time from a contextvar, so a single wrapped agent serves many users concurrently without seeing each other's policies.</p>
-        </div>
-      </details>
-
-      <details class="faq-item" name="faq">
-        <summary><span class="faq-n">06</span><span class="faq-q">What does a policy actually look like?</span><svg class="faq-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></summary>
-        <div class="faq-body">
-          <p>A <code>policy.yaml</code> is deny-by-default with a <code>tools</code> map; each tool gets a mode (<code>allow</code> / <code>deny</code> / <code>approval_required</code>) and optional constraints like <code>args.amount &lt;= 500</code>. Operators are <code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code>, <code>&gt;=</code>, <code>in</code>, <code>not in</code>, all ANDed.</p>
-          <p>The same constraint strings compile to OPA Rego for the WASM engine and run in-process for pydantic — a parity test suite proves both produce identical decisions.</p>
-        </div>
-      </details>
-
-      <details class="faq-item" name="faq">
-        <summary><span class="faq-n">07</span><span class="faq-q">What makes a production bundle trustworthy?</span><svg class="faq-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></summary>
-        <div class="faq-body">
-          <p>Bundles are signed. The manifest carries a SHA-256 of every artifact (including the <code>wasm_hash</code>) plus a detached <b>Ed25519</b> signature over that manifest — the hashes authenticate the files, the signature authenticates the manifest. Set <code>HEXGATE_BUNDLE_REQUIRE_SIGNATURE=true</code> to refuse anything unsigned or unverifiable. The signing key is the same root that signs your biscuit tokens.</p>
-        </div>
-      </details>
-
-      <details class="faq-item" name="faq">
-        <summary><span class="faq-n">08</span><span class="faq-q">Do I need the platform, or can I run the SDK alone?</span><svg class="faq-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></summary>
-        <div class="faq-body">
-          <p>The SDK runs standalone — YAML on disk, in-process enforcement, no Docker or browser. The optional platform (a FastAPI control plane + React dashboard) adds browser policy editing, mintable tokens, a live Playground decision stream, and an append-only audit log in ClickHouse. Edit policy in the UI and the next turn picks it up.</p>
-        </div>
-      </details>
-
-    </div>
-  </div>
-</section>
-
 <section class="final" id="book">
   <div class="glow"></div>
   <div class="wrap">
@@ -858,7 +596,6 @@ runner = <span class="c-fn">HexgateRunner</span>()
         <a href="https://pypi.org/project/hexgate/" target="_blank" rel="noopener">PyPI</a>
         <a href="#frameworks">Frameworks</a>
         <a href="#features">Capabilities</a>
-        <a href="#faq">FAQ</a>
         <a href="#book">Book a demo</a>
       </div>
       <span class="foot-meta">© 2026 Hexamind · MIT</span>
@@ -918,97 +655,18 @@ runner = <span class="c-fn">HexgateRunner</span>()
       '<span class="verdict ' + VCLASS[ev.verdict] + '"><span class="vd"></span>' + VLABEL[ev.verdict] + '</span>';
     return row;
   }
-  function push(instant) {
+  function push() {
     const ev = EVENTS[i % EVENTS.length];
     i++;
     const row = makeRow(ev);
-    if (!reduce && !instant) {
-      row.classList.add('entering');
-      feed.appendChild(row);
-      setTimeout(() => row.classList.remove('entering'), 30);
-    } else {
-      feed.appendChild(row);
-    }
+    if (!reduce) row.classList.add('entering');
+    feed.appendChild(row);
+    if (!reduce) requestAnimationFrame(() => requestAnimationFrame(() => row.classList.remove('entering')));
     while (feed.children.length > MAX) feed.removeChild(feed.firstChild);
   }
   // seed
-  for (let s = 0; s < MAX; s++) push(true);
+  for (let s = 0; s < MAX; s++) push();
   if (!reduce) setInterval(push, 2100);
-
-  /* ---------- hero gate diagram ---------- */
-  (function () {
-    const stage = document.querySelector('.gate-stage');
-    const scaler = document.querySelector('.gate-scaler');
-    if (!stage || !scaler) return;
-
-    function fit() {
-      const w = stage.clientWidth;
-      const s = Math.min(1, w / 1000);
-      scaler.style.transform = 'scale(' + s + ')';
-      stage.style.height = (440 * s) + 'px';
-    }
-    fit();
-    window.addEventListener('resize', fit, { passive: true });
-
-    const PATHS = {
-      allow: 'M190,220 H500 C586,220 660,88 798,88',
-      hold:  'M190,220 H798',
-      deny:  'M190,220 H500 C586,220 660,352 798,352'
-    };
-    const SEQ = [
-      { tool: 'read_file',     verdict: 'allow' },
-      { tool: 'refund_order',  verdict: 'allow' },
-      { tool: 'wire_transfer', verdict: 'hold'  },
-      { tool: 'delete_user',   verdict: 'deny'  },
-      { tool: 'web_search',    verdict: 'allow' },
-      { tool: 'export_pii',    verdict: 'hold'  },
-      { tool: 'issue_credit',  verdict: 'allow' },
-      { tool: 'edit_file',     verdict: 'deny'  }
-    ];
-    const gate = document.getElementById('gate');
-    const counts = { allow: 0, hold: 0, deny: 0 };
-    const DUR = 2600;
-    let k = 0;
-
-    function spawn() {
-      const ev = SEQ[k % SEQ.length]; k++;
-      const p = document.createElement('div');
-      p.className = 'packet';
-      p.textContent = ev.tool + '()';
-      p.style.offsetPath = 'path("' + PATHS[ev.verdict] + '")';
-      p.style.setProperty('--dur', DUR + 'ms');
-      scaler.appendChild(p);
-      setTimeout(function () { p.classList.add('run'); }, 30);
-
-      setTimeout(function () {
-        p.classList.add('v-' + ev.verdict);
-        if (gate) { gate.classList.add('scanning'); setTimeout(function () { gate.classList.remove('scanning'); }, 280); }
-      }, DUR * 0.5);
-
-      setTimeout(function () {
-        const node = document.getElementById('out-' + ev.verdict);
-        if (node) {
-          node.classList.add('hit');
-          counts[ev.verdict]++;
-          const c = node.querySelector('.ocount');
-          if (c) c.textContent = counts[ev.verdict] + ' total';
-          setTimeout(function () { node.classList.remove('hit'); }, 440);
-        }
-      }, DUR * 0.92);
-
-      setTimeout(function () { p.remove(); }, DUR + 150);
-    }
-
-    if (!reduce) {
-      spawn();
-      setInterval(spawn, 1500);
-    } else {
-      ['allow', 'hold', 'deny'].forEach(function (v) {
-        const node = document.getElementById('out-' + v);
-        if (node) { const c = node.querySelector('.ocount'); if (c) c.textContent = '1 total'; }
-      });
-    }
-  })();
 </script>
 
 </body>
