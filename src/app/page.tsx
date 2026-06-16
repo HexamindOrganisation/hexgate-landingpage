@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 
 type Verdict = "allow" | "deny" | "hold";
 type DecisionEvent = {
@@ -31,6 +31,36 @@ const GATE_PATHS: Record<Verdict, string> = {
   allow: "M190,220 H500 C586,220 660,88 798,88",
   hold: "M190,220 H798",
   deny: "M190,220 H500 C586,220 660,352 798,352",
+};
+
+// Mobile vertical layout: 320×420 viewBox. Agent at top, hex in middle,
+// outputs in a 3-up row at the bottom. Paths are shaped so the packet's
+// 50% point lands inside the hex (matches the keyframe pause).
+const MOBILE_GATE_PATHS: Record<Verdict, string> = {
+  allow: "M160,70 V200 L56,365",
+  hold: "M160,70 V365",
+  deny: "M160,70 V200 L264,365",
+};
+
+type GateConfig = {
+  stageW: number;
+  stageH: number;
+  maxScale: number;
+  paths: Record<Verdict, string>;
+};
+
+const DESKTOP_CONFIG: GateConfig = {
+  stageW: 1000,
+  stageH: 440,
+  maxScale: 1,
+  paths: GATE_PATHS,
+};
+
+const MOBILE_CONFIG: GateConfig = {
+  stageW: 320,
+  stageH: 420,
+  maxScale: 1.4,
+  paths: MOBILE_GATE_PATHS,
 };
 
 type GateEvent = { tool: string; verdict: Verdict };
@@ -153,37 +183,40 @@ function LiveFeed() {
   return <div className="feed" ref={feedRef} />;
 }
 
-function GateDiagram() {
-  const stageRef = useRef<HTMLDivElement>(null);
-  const scalerRef = useRef<HTMLDivElement>(null);
-  const gateRef = useRef<HTMLDivElement>(null);
-  const outAllowRef = useRef<HTMLDivElement>(null);
-  const outHoldRef = useRef<HTMLDivElement>(null);
-  const outDenyRef = useRef<HTMLDivElement>(null);
+type GateRefs = {
+  stage: RefObject<HTMLDivElement | null>;
+  scaler: RefObject<HTMLDivElement | null>;
+  gate: RefObject<HTMLDivElement | null>;
+  allow: RefObject<HTMLDivElement | null>;
+  hold: RefObject<HTMLDivElement | null>;
+  deny: RefObject<HTMLDivElement | null>;
+};
 
+function useGatePackets(refs: GateRefs, config: GateConfig) {
   useEffect(() => {
-    const stage = stageRef.current;
-    const scaler = scalerRef.current;
+    const stage = refs.stage.current;
+    const scaler = refs.scaler.current;
     if (!stage || !scaler) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const fit = () => {
       const w = stage.clientWidth;
-      const s = Math.min(1, w / 1000);
+      const s = Math.min(config.maxScale, w / config.stageW);
       scaler.style.transform = `scale(${s})`;
-      // Scaler's intrinsic width is 1000px; on narrow stages `margin: 0 auto`
-      // collapses to 0 and transform-origin: top center scales around an
-      // off-screen point. Explicit negative marginLeft lands the center on
-      // the stage's true center so the diagram stays visible on mobile.
-      scaler.style.marginLeft = `${(w - 1000) / 2}px`;
-      stage.style.height = `${440 * s}px`;
+      // Scaler's intrinsic width may differ from the stage's; explicit
+      // marginLeft lands the scaler's intrinsic center on the stage's true
+      // center, keeping the scaled diagram visible at any viewport width.
+      scaler.style.marginLeft = `${(w - config.stageW) / 2}px`;
+      stage.style.height = `${config.stageH * s}px`;
     };
     fit();
     window.addEventListener("resize", fit, { passive: true });
 
+    const outRefs = { allow: refs.allow, hold: refs.hold, deny: refs.deny };
+
     if (reduce) {
       for (const v of ["allow", "hold", "deny"] as const) {
-        const node = { allow: outAllowRef, hold: outHoldRef, deny: outDenyRef }[v].current;
+        const node = outRefs[v].current;
         const c = node?.querySelector(".ocount");
         if (c) c.textContent = "1 total";
       }
@@ -202,7 +235,6 @@ function GateDiagram() {
         fn();
       }, ms);
       timeouts.add(id);
-      return id;
     };
 
     const spawn = () => {
@@ -212,7 +244,7 @@ function GateDiagram() {
       const p = document.createElement("div");
       p.className = "packet";
       p.textContent = `${ev.tool}()`;
-      p.style.offsetPath = `path("${GATE_PATHS[ev.verdict]}")`;
+      p.style.offsetPath = `path("${config.paths[ev.verdict]}")`;
       p.style.setProperty("--dur", `${DUR}ms`);
       scaler.appendChild(p);
       packets.add(p);
@@ -221,7 +253,7 @@ function GateDiagram() {
 
       schedule(() => {
         p.classList.add(`v-${ev.verdict}`);
-        const gate = gateRef.current;
+        const gate = refs.gate.current;
         if (gate) {
           gate.classList.add("scanning");
           schedule(() => gate.classList.remove("scanning"), 280);
@@ -229,7 +261,7 @@ function GateDiagram() {
       }, DUR * 0.5);
 
       schedule(() => {
-        const node = { allow: outAllowRef, hold: outHoldRef, deny: outDenyRef }[ev.verdict].current;
+        const node = outRefs[ev.verdict].current;
         if (node) {
           node.classList.add("hit");
           counts[ev.verdict] += 1;
@@ -254,7 +286,30 @@ function GateDiagram() {
       for (const id of timeouts) window.clearTimeout(id);
       for (const p of packets) p.remove();
     };
+    // refs are stable RefObjects; config is a module-level constant
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+}
+
+function GateDiagram() {
+  const stageRef = useRef<HTMLDivElement>(null);
+  const scalerRef = useRef<HTMLDivElement>(null);
+  const gateRef = useRef<HTMLDivElement>(null);
+  const outAllowRef = useRef<HTMLDivElement>(null);
+  const outHoldRef = useRef<HTMLDivElement>(null);
+  const outDenyRef = useRef<HTMLDivElement>(null);
+
+  useGatePackets(
+    {
+      stage: stageRef,
+      scaler: scalerRef,
+      gate: gateRef,
+      allow: outAllowRef,
+      hold: outHoldRef,
+      deny: outDenyRef,
+    },
+    DESKTOP_CONFIG
+  );
 
   return (
     <div
@@ -336,6 +391,125 @@ function GateDiagram() {
       </div>
     </div>
   );
+}
+
+function MobileGateDiagram() {
+  const stageRef = useRef<HTMLDivElement>(null);
+  const scalerRef = useRef<HTMLDivElement>(null);
+  const gateRef = useRef<HTMLDivElement>(null);
+  const outAllowRef = useRef<HTMLDivElement>(null);
+  const outHoldRef = useRef<HTMLDivElement>(null);
+  const outDenyRef = useRef<HTMLDivElement>(null);
+
+  useGatePackets(
+    {
+      stage: stageRef,
+      scaler: scalerRef,
+      gate: gateRef,
+      allow: outAllowRef,
+      hold: outHoldRef,
+      deny: outDenyRef,
+    },
+    MOBILE_CONFIG
+  );
+
+  return (
+    <div
+      className="gate-stage gate-stage--mobile"
+      ref={stageRef}
+      aria-label="Animated diagram: an agent tool call passing through the policy gate to an allow, approval, or deny decision"
+    >
+      <div className="gate-scaler gate-scaler--mobile" ref={scalerRef}>
+        <svg className="gate-wires" viewBox="0 0 320 420" preserveAspectRatio="none" aria-hidden="true">
+          <path className="wire wire-base" d="M160,70 V200 L56,365" />
+          <path className="wire wire-base" d="M160,70 V365" />
+          <path className="wire wire-base" d="M160,70 V200 L264,365" />
+          <path className="wire wire-allow" d="M160,267 L56,365" />
+          <path className="wire wire-hold" d="M160,267 V365" />
+          <path className="wire wire-deny" d="M160,267 L264,365" />
+          <path className="wire wire-trunk flow" d="M160,70 V128" />
+        </svg>
+
+        <div className="gnode gn-agent">
+          <div className="ghead">
+            <span className="gdot" />
+            <span className="gname">Agent</span>
+          </div>
+          <span className="gsub">emitting tool calls</span>
+        </div>
+
+        <div className="gnode gn-gate" ref={gateRef}>
+          <div className="hexwrap">
+            <svg className="hexsvg" viewBox="0 0 120 134" aria-hidden="true">
+              <polygon className="hexfill" points="60,3 117,34 117,100 60,131 3,100 3,34" />
+              <polygon className="hexstroke" points="60,3 117,34 117,100 60,131 3,100 3,34" />
+            </svg>
+            <div className="scanline" />
+            <div className="gatelabel">
+              <span className="glabel-k">POLICY GATE</span>
+              <span className="glabel-fn">decide()</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="gnode gn-out out-allow" ref={outAllowRef}>
+          <div className="obadge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20 6 9 17l-5-5" />
+            </svg>
+          </div>
+          <div className="otext">
+            <span className="olabel">ALLOW</span>
+            <span className="ocount">0 total</span>
+          </div>
+        </div>
+        <div className="gnode gn-out out-hold" ref={outHoldRef}>
+          <div className="obadge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 7v5l3 2" />
+            </svg>
+          </div>
+          <div className="otext">
+            <span className="olabel">APPROVAL</span>
+            <span className="ocount">0 total</span>
+          </div>
+        </div>
+        <div className="gnode gn-out out-deny" ref={outDenyRef}>
+          <div className="obadge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
+          </div>
+          <div className="otext">
+            <span className="olabel">DENY</span>
+            <span className="ocount">0 total</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function HeroDiagram() {
+  const [mounted, setMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 700px)");
+    setIsMobile(mq.matches);
+    setMounted(true);
+    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
+  if (!mounted) {
+    // Placeholder reserves space during initial paint so the layout doesn't
+    // jump when the right variant mounts on the client.
+    return <div className="gate-stage" style={{ minHeight: 360 }} />;
+  }
+  return isMobile ? <MobileGateDiagram /> : <GateDiagram />;
 }
 
 function FaqChevron() {
@@ -570,7 +744,7 @@ export default function Home() {
         </div>
 
         <div className="wrap">
-          <GateDiagram />
+          <HeroDiagram />
         </div>
       </header>
 
