@@ -171,6 +171,11 @@ function GateDiagram() {
       const w = stage.clientWidth;
       const s = Math.min(1, w / 1000);
       scaler.style.transform = `scale(${s})`;
+      // Scaler's intrinsic width is 1000px; on narrow stages `margin: 0 auto`
+      // collapses to 0 and transform-origin: top center scales around an
+      // off-screen point. Explicit negative marginLeft lands the center on
+      // the stage's true center so the diagram stays visible on mobile.
+      scaler.style.marginLeft = `${(w - 1000) / 2}px`;
       stage.style.height = `${440 * s}px`;
     };
     fit();
