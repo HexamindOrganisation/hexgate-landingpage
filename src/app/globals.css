@@ -1258,6 +1258,113 @@ footer {
   }
 }
 
+/* ---------- HERO GATE DIAGRAM — MOBILE VARIANT ---------- */
+/* Vertical 320×420 layout: agent at top, hex in middle, 3-up outputs row at
+   bottom. Renders for viewports ≤700px via the <HeroDiagram> wrapper.
+   All overrides are scoped under .gate-scaler--mobile so the desktop variant
+   is untouched. */
+.gate-stage--mobile {
+  margin-top: 32px;
+}
+.gate-scaler--mobile {
+  width: 320px;
+  height: 420px;
+}
+
+.gate-scaler--mobile .gn-agent {
+  left: 20px;
+  top: 10px;
+  width: 280px;
+  height: 60px;
+  padding: 0 16px;
+  gap: 4px;
+}
+.gate-scaler--mobile .gn-agent .ghead {
+  justify-content: center;
+}
+.gate-scaler--mobile .gn-agent .gname {
+  font-size: 15px;
+}
+.gate-scaler--mobile .gn-agent .gsub {
+  text-align: center;
+  font-size: 10.5px;
+}
+
+.gate-scaler--mobile .gn-gate {
+  left: 100px;
+  top: 133px;
+  width: 120px;
+  height: 134px;
+}
+.gate-scaler--mobile .gn-gate::before {
+  width: 180px;
+  height: 180px;
+}
+.gate-scaler--mobile .hexwrap {
+  width: 120px;
+  height: 134px;
+}
+.gate-scaler--mobile .hexsvg {
+  width: 120px;
+  height: 134px;
+}
+.gate-scaler--mobile .scanline {
+  left: 12px;
+  right: 12px;
+  animation: scan-mobile 2.4s ease-in-out infinite;
+}
+.gate-scaler--mobile .glabel-k {
+  font-size: 9px;
+}
+.gate-scaler--mobile .glabel-fn {
+  font-size: 14px;
+}
+@keyframes scan-mobile {
+  0%,
+  100% {
+    transform: translateY(-44px);
+  }
+  50% {
+    transform: translateY(44px);
+  }
+}
+
+.gate-scaler--mobile .gn-out {
+  width: 96px;
+  height: 54px;
+  padding: 0 9px;
+  gap: 8px;
+}
+.gate-scaler--mobile .gn-out .obadge {
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+}
+.gate-scaler--mobile .gn-out .obadge svg {
+  width: 13px;
+  height: 13px;
+}
+.gate-scaler--mobile .gn-out .olabel {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+}
+.gate-scaler--mobile .gn-out .ocount {
+  font-size: 9.5px;
+  margin-top: 2px;
+}
+.gate-scaler--mobile .out-allow {
+  left: 8px;
+  top: 340px;
+}
+.gate-scaler--mobile .out-hold {
+  left: 112px;
+  top: 340px;
+}
+.gate-scaler--mobile .out-deny {
+  left: 216px;
+  top: 340px;
+}
+
 /* ---------- FAQ ---------- */
 .faq-list {
   max-width: 860px;
