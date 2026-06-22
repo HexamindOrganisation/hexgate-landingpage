@@ -1,7 +1,18 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useEffect, useRef, useState, type RefObject } from "react";
+import { useEffect, useRef, useSyncExternalStore, type RefObject } from "react";
+import Link from "next/link";
+import { CopyInstall } from "../components/CopyInstall";
+
+const MOBILE_QUERY = "(max-width: 700px)";
+const subscribeMobile = (cb: () => void) => {
+  const mq = window.matchMedia(MOBILE_QUERY);
+  mq.addEventListener("change", cb);
+  return () => mq.removeEventListener("change", cb);
+};
+const getMobileSnapshot = () => window.matchMedia(MOBILE_QUERY).matches;
+const getMobileServerSnapshot = () => false;
 
 type Verdict = "allow" | "deny" | "hold";
 type DecisionEvent = {
@@ -95,51 +106,6 @@ function HexMark() {
   );
 }
 
-function CopyIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="9" y="9" width="13" height="13" rx="2" />
-      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-    </svg>
-  );
-}
-
-function CheckIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M20 6 9 17l-5-5" />
-    </svg>
-  );
-}
-
-function CopyInstall({ id }: { id: string }) {
-  const [copied, setCopied] = useState(false);
-  const onClick = async () => {
-    try {
-      await navigator.clipboard.writeText("pip install hexgate");
-    } catch {
-      /* no-op */
-    }
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1600);
-  };
-  return (
-    <div className="install">
-      <span>
-        <span className="prompt">$</span> pip install <span className="pkg">hexgate</span>
-      </span>
-      <button
-        id={id}
-        className={`copy-btn${copied ? " copied" : ""}`}
-        aria-label="Copy install command"
-        onClick={onClick}
-      >
-        {copied ? <CheckIcon /> : <CopyIcon />}
-      </button>
-    </div>
-  );
-}
-
 function LiveFeed() {
   const feedRef = useRef<HTMLDivElement>(null);
   const indexRef = useRef(0);
@@ -200,6 +166,8 @@ function useGatePackets(refs: GateRefs, config: GateConfig) {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const fit = () => {
+      // DOM animation: mutating .style on elements pulled from refs is intentional.
+      // eslint-disable-next-line react-hooks/immutability
       const w = stage.clientWidth;
       const s = Math.min(config.maxScale, w / config.stageW);
       scaler.style.transform = `scale(${s})`;
@@ -492,23 +460,11 @@ function MobileGateDiagram() {
 }
 
 function HeroDiagram() {
-  const [mounted, setMounted] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 700px)");
-    setIsMobile(mq.matches);
-    setMounted(true);
-    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  }, []);
-
-  if (!mounted) {
-    // Placeholder reserves space during initial paint so the layout doesn't
-    // jump when the right variant mounts on the client.
-    return <div className="gate-stage" style={{ minHeight: 360 }} />;
-  }
+  const isMobile = useSyncExternalStore(
+    subscribeMobile,
+    getMobileSnapshot,
+    getMobileServerSnapshot,
+  );
   return isMobile ? <MobileGateDiagram /> : <GateDiagram />;
 }
 
@@ -526,7 +482,7 @@ const FAQS: FaqItem[] = [
     q: "Do I have to rewrite my agent?",
     body: (
       <p>
-        No. Hexgate ships adapters that wrap an existing <b>OpenAI Agents</b>, <b>LangChain / LangGraph</b>, <b>Google ADK</b>, or <b>Pydantic AI</b> agent without touching its logic — swap your runner for <code>HexgateRunner</code> (or call <code>wrap_langchain_agent</code> / <code>wrap_pydantic_agent</code>) once. Your original agent object is left intact; the wrapper holds the policy and gates every tool the agent can invoke.
+        No. Hexgate ships adapters that wrap an existing <b>OpenAI Agents</b>, <b>LangChain / LangGraph</b>, <b>Google ADK</b>, or <b>Pydantic AI</b> agent without touching its logic. Swap your runner for <code>HexgateRunner</code> (or call <code>wrap_langchain_agent</code> / <code>wrap_pydantic_agent</code>) once. Your original agent object is left intact; the wrapper holds the policy and gates every tool the agent can invoke.
       </p>
     ),
   },
@@ -534,7 +490,7 @@ const FAQS: FaqItem[] = [
     q: "Does gating every call add latency or a network round-trip?",
     body: (
       <p>
-        No per-decision round-trip. Policy is evaluated <b>in-process</b> — by the default pydantic engine, or in production by a compiled WASM bundle run via <code>wasmtime</code>. The bundle is fetched once and refreshed only at turn boundaries with an <code>ETag</code> / <code>304</code> check, so individual <code>decide()</code> calls never leave the process.
+        No per-decision round-trip. Policy is evaluated <b>in-process</b>, either by the default pydantic engine or in production by a compiled WASM bundle run via <code>wasmtime</code>. The bundle is fetched once and refreshed only at turn boundaries with an <code>ETag</code> / <code>304</code> check, so individual <code>decide()</code> calls never leave the process.
       </p>
     ),
   },
@@ -557,9 +513,14 @@ const FAQS: FaqItem[] = [
   {
     q: "How does per-user scope work if one agent serves everyone?",
     body: (
-      <p>
-        Identity and rules are decoupled. A per-request <code>User</code> context manager carries <em>who</em> is calling (<code>user_id</code>, <code>role</code>, <code>session_id</code>, optional <code>ttl</code>) as a signed biscuit token; role policy files decide <em>what</em> that role can do. Role is resolved at call time from a contextvar, so a single wrapped agent serves many users concurrently without seeing each other&apos;s policies.
-      </p>
+      <>
+        <p>
+          Identity and rules are decoupled. A per-request <code>User</code> context manager carries <em>who</em> is calling (<code>user_id</code>, <code>role</code>, <code>session_id</code>, optional <code>ttl</code>) as a signed biscuit token; role policy files decide <em>what</em> that role can do. Role is resolved at call time from a contextvar, so a single wrapped agent serves many users concurrently without seeing each other&apos;s policies.
+        </p>
+        <p>
+          Unlike governance toolkits that key policy on <code>agent_id</code> alone, Hexgate threads the end-user identity through every decision. The same agent code runs with different effective permissions depending on which user invoked it. See the full breakdown in <Link href="/vs/microsoft-agent-governance-toolkit" className="inline-link">Hexgate vs Microsoft Agent Governance Toolkit</Link>.
+        </p>
+      </>
     ),
   },
   {
@@ -570,7 +531,7 @@ const FAQS: FaqItem[] = [
           A <code>policy.yaml</code> is deny-by-default with a <code>tools</code> map; each tool gets a mode (<code>allow</code> / <code>deny</code> / <code>approval_required</code>) and optional constraints like <code>args.amount &lt;= 500</code>. Operators are <code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code>, <code>&gt;=</code>, <code>in</code>, <code>not in</code>, all ANDed.
         </p>
         <p>
-          The same constraint strings compile to OPA Rego for the WASM engine and run in-process for pydantic — a parity test suite proves both produce identical decisions.
+          The same constraint strings compile to OPA Rego for the WASM engine and run in-process for pydantic. A parity test suite proves both produce identical decisions.
         </p>
       </>
     ),
@@ -579,7 +540,7 @@ const FAQS: FaqItem[] = [
     q: "What makes a production bundle trustworthy?",
     body: (
       <p>
-        Bundles are signed. The manifest carries a SHA-256 of every artifact (including the <code>wasm_hash</code>) plus a detached <b>Ed25519</b> signature over that manifest — the hashes authenticate the files, the signature authenticates the manifest. Set <code>HEXGATE_BUNDLE_REQUIRE_SIGNATURE=true</code> to refuse anything unsigned or unverifiable. The signing key is the same root that signs your biscuit tokens.
+        Bundles are signed. The manifest carries a SHA-256 of every artifact (including the <code>wasm_hash</code>) plus a detached <b>Ed25519</b> signature over that manifest. The hashes authenticate the files; the signature authenticates the manifest. Set <code>HEXGATE_BUNDLE_REQUIRE_SIGNATURE=true</code> to refuse anything unsigned or unverifiable. The signing key is the same root that signs your biscuit tokens.
       </p>
     ),
   },
@@ -587,7 +548,7 @@ const FAQS: FaqItem[] = [
     q: "Do I need the platform, or can I run the SDK alone?",
     body: (
       <p>
-        The SDK runs standalone — YAML on disk, in-process enforcement, no Docker or browser. The optional platform (a FastAPI control plane + React dashboard) adds browser policy editing, mintable tokens, a live Playground decision stream, and an append-only audit log in ClickHouse. Edit policy in the UI and the next turn picks it up.
+        The SDK runs standalone: YAML on disk, in-process enforcement, no Docker or browser. The optional platform (a FastAPI control plane + React dashboard) adds browser policy editing, mintable tokens, a live Playground decision stream, and an append-only audit log in ClickHouse. Edit policy in the UI and the next turn picks it up.
       </p>
     ),
   },
@@ -703,15 +664,15 @@ export default function Home() {
               <span className="dot" /> Enforced locally · <b>zero added latency</b>
             </span>
             <h1>
-              Control what your agents&nbsp;do.
+              Per-user authorization for AI&nbsp;agents.
               <br />
-              <span className="accent">Not just what they&nbsp;say.</span>
+              <span className="accent">Gate what they do, not just what they&nbsp;say.</span>
             </h1>
             <p className="lede">
-              Guardrails stop at the prompt. Hexgate governs what your agents actually <b>do</b> —
-              every tool call and resource access, allowed, denied, or held for approval. The policy
-              is enforced <b>locally from a signed bundle</b>, so fine-grained control costs you nothing
-              on the critical path.
+              One agent, many users, each gated by their own role. Hexgate carries{" "}
+              <b>per-request user identity</b> through every tool call, with policy enforced{" "}
+              <b>in-process from a signed WASM bundle</b>. Fine-grained control with zero added
+              latency on the critical path.
             </p>
             <div className="cta-row">
               <CopyInstall id="copyBtn" />
@@ -756,7 +717,7 @@ export default function Home() {
               <img
                 className="fwlogo"
                 src="https://cdn.jsdelivr.net/npm/simple-icons@14/icons/openai.svg"
-                alt="OpenAI Agents framework — supported by Hexgate"
+                alt="OpenAI Agents framework, supported by Hexgate"
                 width={18}
                 height={18}
                 loading="lazy"
@@ -767,7 +728,7 @@ export default function Home() {
               <img
                 className="fwlogo"
                 src="https://cdn.jsdelivr.net/npm/simple-icons@14/icons/langchain.svg"
-                alt="LangChain and LangGraph — supported by Hexgate"
+                alt="LangChain and LangGraph, supported by Hexgate"
                 width={18}
                 height={18}
                 loading="lazy"
@@ -778,7 +739,7 @@ export default function Home() {
               <img
                 className="fwlogo"
                 src="https://cdn.jsdelivr.net/npm/simple-icons@14/icons/google.svg"
-                alt="Google ADK — supported by Hexgate"
+                alt="Google ADK, supported by Hexgate"
                 width={18}
                 height={18}
                 loading="lazy"
@@ -789,7 +750,7 @@ export default function Home() {
               <img
                 className="fwlogo"
                 src="https://cdn.jsdelivr.net/npm/simple-icons@14/icons/pydantic.svg"
-                alt="Pydantic AI — supported by Hexgate"
+                alt="Pydantic AI, supported by Hexgate"
                 width={18}
                 height={18}
                 loading="lazy"
@@ -807,7 +768,7 @@ export default function Home() {
             <span className="eyebrow">Live audit feed</span>
             <h2>Every decision, on the record.</h2>
             <p>
-              Past the gate, each verdict streams to an append-only log — the caller&apos;s role, the
+              Past the gate, each verdict streams to an append-only log: the caller&apos;s role, the
               tool, the outcome, and the exact constraint behind it.
             </p>
           </div>
@@ -821,8 +782,9 @@ export default function Home() {
             <span className="eyebrow">The control plane for agentic systems</span>
             <h2>Authorization that travels with every&nbsp;tool&nbsp;call.</h2>
             <p>
-              Capable agents are only as safe as the boundary around them. Hexgate is that boundary —
-              four primitives, one enforcement seam.
+              The capability you give an agent is the capability it can be jailbroken into using.
+              Hexgate sits at that boundary and turns it into four primitives you can edit, version,
+              and audit.
             </p>
           </div>
           <div className="features">
@@ -842,8 +804,8 @@ export default function Home() {
               </div>
               <h3>Policy enforcement</h3>
               <p>
-                Deny-by-default. Every tool call returns a typed <code>Decision</code> — allow, deny, or
-                approval-required — evaluated against the caller&apos;s role at call time.
+                Deny-by-default. Every tool call returns a typed <code>Decision</code> (allow, deny,
+                or approval-required), evaluated against the caller&apos;s role at call time.
               </p>
             </article>
             <article className="feat">
@@ -862,9 +824,9 @@ export default function Home() {
               </div>
               <h3>Signed bundles, local speed</h3>
               <p>
-                The signed WASM bundle is fetched <b>once per run</b> and enforced in-process — no security
-                service on the hot path, no round-trip per decision. Fast by design, verified before it&apos;s
-                trusted.
+                The signed WASM bundle is fetched <b>once per run</b> and enforced in-process. No
+                security service on the hot path, no round-trip per decision. Fast by design,
+                verified before it&apos;s trusted.
               </p>
             </article>
             <article className="feat">
@@ -881,10 +843,12 @@ export default function Home() {
                   <path d="M4 21c0-3.5 3.6-6 8-6s8 2.5 8 6" />
                 </svg>
               </div>
-              <h3>Per-request user scope</h3>
+              <h3>Per-user authorization, not per-agent</h3>
               <p>
-                Biscuit tokens carry <em>who</em> is calling; role policies decide <em>what</em> they can
-                do. One wrapped agent serves every user, scoped per request.
+                Biscuit tokens carry <em>who</em> is calling; role policies decide <em>what</em>
+                they can do. One wrapped agent serves every user: same code, different effective
+                permissions per request. Other governance toolkits gate the agent. Hexgate gates the
+                user, through the agent.
               </p>
             </article>
             <article className="feat">
@@ -903,8 +867,9 @@ export default function Home() {
               </div>
               <h3>Audit trail</h3>
               <p>
-                Every decision streams to the audit log — who acted, which tool, the verdict, and the
-                exact constraint that allowed or blocked it. Answerable, not hand-wavy.
+                Every decision streams to the audit log: who acted, which tool, the verdict, and
+                the exact constraint that allowed or blocked it. When someone asks why a call went
+                through, you can show them the line.
               </p>
             </article>
           </div>
@@ -939,7 +904,7 @@ export default function Home() {
                   <span className="c-kw">from</span> hexgate.runtime{" "}
                   <span className="c-kw">import</span> <span className="c-fn">User</span>
                   {"\n\n"}
-                  <span className="c-com"># picks up HEXGATE_KEY from env — no rewrite</span>
+                  <span className="c-com"># picks up HEXGATE_KEY from env, no rewrite</span>
                   {"\n"}
                   runner = <span className="c-fn">HexgateRunner</span>()
                   {"\n\n"}
@@ -1000,8 +965,8 @@ export default function Home() {
             </div>
           </div>
           <p className="code-note">
-            <span className="tk">✓</span> Identical decisions in dev (in-process) and prod (signed WASM)
-            — proven by a parity test suite.
+            <span className="tk">✓</span> Identical decisions in dev (in-process) and prod (signed
+            WASM), proven by a parity test suite.
           </p>
 
           <div className="steps">
@@ -1009,8 +974,8 @@ export default function Home() {
               <div className="n">01 / WRAP</div>
               <h4>Keep your agent</h4>
               <p>
-                OpenAI, LangChain, Google ADK, or Pydantic AI — wrap it once. Your original object is left
-                untouched.
+                OpenAI, LangChain, Google ADK, or Pydantic AI: wrap it once. Your original object is
+                left untouched.
               </p>
             </div>
             <div className="step">
@@ -1018,7 +983,8 @@ export default function Home() {
               <h4>Gate every call</h4>
               <p>
                 Each tool invocation resolves the caller&apos;s role and returns allow, deny, or
-                approval-required — recoverable, never a crash.
+                approval-required. Denials come back as tool results the model can react to, so a
+                blocked call doesn&apos;t abort the run.
               </p>
             </div>
             <div className="step">
@@ -1050,7 +1016,7 @@ export default function Home() {
           <div className="final-card">
             <span className="eyebrow">Get started</span>
             <h2 style={{ marginTop: 16 }}>
-              Let your agents do more —
+              Let your agents do more,
               <br />
               because nothing they do is unchecked.
             </h2>
@@ -1100,6 +1066,7 @@ export default function Home() {
               <a href="#frameworks">Frameworks</a>
               <a href="#features">Capabilities</a>
               <a href="#faq">FAQ</a>
+              <Link href="/vs/microsoft-agent-governance-toolkit">vs Microsoft AGT</Link>
               <a href="#book">Book a demo</a>
             </div>
             <span className="foot-meta">

@@ -7,7 +7,7 @@ Marketing site for [Hexgate](https://github.com/HexamindOrganisation/hexgate) â€
 - Next.js 16 (App Router) + React 19
 - TypeScript
 - Tailwind CSS v4 (CSS-first config via `@theme inline` in `globals.css`)
-- Self-hosted Google fonts via `next/font`: Space Grotesk, Hanken Grotesk, JetBrains Mono
+- Self-hosted Google fonts via `next/font`: Hanken Grotesk (sans + display), IBM Plex Mono (code)
 - Deployed on Vercel
 
 ## Local development
