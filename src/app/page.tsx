@@ -623,6 +623,7 @@ function Nav() {
           <a href="#audit">Audit log</a>
           <a href="#features">Capabilities</a>
           <a href="#code">Quickstart</a>
+          <a href="/roadmap">Roadmap</a>
           <a href="#faq">FAQ</a>
           <a href="https://docs.hexgate.ai" target="_blank" rel="noopener">
             Docs
