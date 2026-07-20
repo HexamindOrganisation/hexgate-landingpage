@@ -4,6 +4,7 @@
 import { useEffect, useRef, useSyncExternalStore, type RefObject } from "react";
 import Link from "next/link";
 import { CopyInstall } from "../components/CopyInstall";
+import { MobileMenu } from "../components/MobileMenu";
 
 const MOBILE_QUERY = "(max-width: 700px)";
 const subscribeMobile = (cb: () => void) => {
@@ -620,11 +621,8 @@ function Nav() {
         </a>
         <div className="nav-links">
           <a href="#frameworks">Frameworks</a>
-          <a href="#audit">Audit log</a>
           <a href="#features">Capabilities</a>
-          <a href="#code">Quickstart</a>
           <a href="/roadmap">Roadmap</a>
-          <a href="#faq">FAQ</a>
           <a href="https://docs.hexgate.ai" target="_blank" rel="noopener">
             Docs
           </a>
@@ -645,6 +643,7 @@ function Nav() {
             Book a demo
           </a>
         </div>
+        <MobileMenu />
       </div>
     </nav>
   );

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CopyInstall } from "../../components/CopyInstall";
+import { MobileMenu } from "../../components/MobileMenu";
 
 export const metadata: Metadata = {
   title: "Roadmap | Hexgate",
@@ -148,7 +149,6 @@ export default function RoadmapPage() {
             <Link href="/roadmap" aria-current="page">
               Roadmap
             </Link>
-            <Link href="/#faq">FAQ</Link>
             <a href="https://docs.hexgate.ai" target="_blank" rel="noopener">
               Docs
             </a>
@@ -161,6 +161,7 @@ export default function RoadmapPage() {
               Book a demo
             </Link>
           </div>
+          <MobileMenu />
         </div>
       </nav>
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CopyInstall } from "../../../components/CopyInstall";
+import { MobileMenu } from "../../../components/MobileMenu";
 
 export const metadata: Metadata = {
   title:
@@ -220,7 +221,6 @@ export default function ComparisonPage() {
             <Link href="/#frameworks">Frameworks</Link>
             <Link href="/#features">Capabilities</Link>
             <Link href="/roadmap">Roadmap</Link>
-            <Link href="/#faq">FAQ</Link>
             <a href="https://docs.hexgate.ai" target="_blank" rel="noopener">
               Docs
             </a>
@@ -238,6 +238,7 @@ export default function ComparisonPage() {
               Book a demo
             </Link>
           </div>
+          <MobileMenu />
         </div>
       </nav>
 

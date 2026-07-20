@@ -2201,3 +2201,64 @@ footer {
     transition: none;
   }
 }
+
+/* ---------- MOBILE MENU ---------- */
+.mnav {
+  display: none;
+  position: relative;
+}
+.mnav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: 1px solid var(--line-2);
+  border-radius: 9px;
+  color: var(--tx);
+  cursor: pointer;
+}
+.mnav-btn svg {
+  width: 22px;
+  height: 22px;
+}
+.mnav-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 12px);
+  min-width: 220px;
+  background: var(--panel);
+  border: 1px solid var(--line-2);
+  border-radius: 14px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  box-shadow: 0 24px 50px -24px rgba(0, 0, 0, 0.75);
+  z-index: 200;
+}
+.mnav-panel a:not(.btn) {
+  padding: 11px 14px;
+  border-radius: 9px;
+  color: var(--tx-1);
+  font-weight: 500;
+  font-size: 0.98rem;
+}
+.mnav-panel a:not(.btn):hover {
+  background: var(--bg-2);
+  color: var(--tx);
+}
+.mnav-panel .btn {
+  margin-top: 6px;
+  width: 100%;
+  justify-content: center;
+}
+@media (max-width: 760px) {
+  .mnav {
+    display: block;
+  }
+  .nav-cta {
+    display: none;
+  }
+}
