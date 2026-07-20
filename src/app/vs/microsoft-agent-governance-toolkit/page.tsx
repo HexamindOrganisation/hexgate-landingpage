@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CopyInstall } from "../../../components/CopyInstall";
+import { MobileMenu } from "../../../components/MobileMenu";
 
 export const metadata: Metadata = {
   title:
@@ -84,12 +85,6 @@ const ROWS: { dimension: string; agt: string; hexgate: string; advantage: "agt" 
     advantage: "tie",
   },
   {
-    dimension: "OWASP Agentic Top 10",
-    agt: "10 / 10 risks addressed (broad framework)",
-    hexgate: "Opinionated subset: tool-call authorization, audit, approval flows",
-    advantage: "agt",
-  },
-  {
     dimension: "Integration footprint",
     agt: "Framework-agnostic policy engine; you wire the tool wrappers",
     hexgate: "Drop-in adapters: OpenAI Agents, LangChain, Google ADK, Pydantic AI",
@@ -114,6 +109,81 @@ function Verdict({ value }: { value: "agt" | "hexgate" | "tie" }) {
   if (value === "agt") return <span className="vs-tag vs-tag-agt">AGT</span>;
   return <span className="vs-tag vs-tag-hex">Hexgate</span>;
 }
+
+type Cov = "full" | "part" | "plan" | "broad";
+const COV_LABEL: Record<Cov, string> = { full: "Covered", part: "Partial", plan: "Planned", broad: "Broad" };
+
+function CovTag({ level, note }: { level: Cov; note: string }) {
+  return (
+    <span className="owasp-cell">
+      <span className={`owasp-tag owasp-${level}`}>{COV_LABEL[level]}</span>
+      <span className="owasp-note">{note}</span>
+    </span>
+  );
+}
+
+const OWASP: { id: string; risk: string; agt: { level: Cov; note: string }; hex: { level: Cov; note: string } }[] = [
+  {
+    id: "ASI01",
+    risk: "Agent Goal Hijack",
+    agt: { level: "broad", note: "Framework coverage" },
+    hex: { level: "part", note: "Per-call authz limits blast radius, audit flags it" },
+  },
+  {
+    id: "ASI02",
+    risk: "Tool Misuse & Exploitation",
+    agt: { level: "full", note: "MCP security gateway" },
+    hex: { level: "full", note: "Per-call + per-argument authz, MCP gate" },
+  },
+  {
+    id: "ASI03",
+    risk: "Identity & Privilege Abuse",
+    agt: { level: "part", note: "Agent identity only (no per-user)" },
+    hex: { level: "full", note: "Per-user Biscuit, role policy, attenuation" },
+  },
+  {
+    id: "ASI04",
+    risk: "Agentic Supply Chain",
+    agt: { level: "broad", note: "Framework coverage" },
+    hex: { level: "part", note: "Signed WASM bundles; wider scope on the roadmap" },
+  },
+  {
+    id: "ASI05",
+    risk: "Unexpected Code Execution",
+    agt: { level: "broad", note: "Agent hypervisor" },
+    hex: { level: "part", note: "Approval gates + sandboxed workspace" },
+  },
+  {
+    id: "ASI06",
+    risk: "Memory & Context Poisoning",
+    agt: { level: "broad", note: "Framework coverage" },
+    hex: { level: "part", note: "Audit + detection" },
+  },
+  {
+    id: "ASI07",
+    risk: "Insecure Inter-Agent Comms",
+    agt: { level: "full", note: "MCP gateway" },
+    hex: { level: "plan", note: "Transparent proxy + identity" },
+  },
+  {
+    id: "ASI08",
+    risk: "Cascading Failures",
+    agt: { level: "broad", note: "Trust scoring across chains" },
+    hex: { level: "plan", note: "Kill-switch + audit; mostly architectural" },
+  },
+  {
+    id: "ASI09",
+    risk: "Human-Agent Trust Exploitation",
+    agt: { level: "broad", note: "Framework coverage" },
+    hex: { level: "part", note: "Approval flows add friction, audit" },
+  },
+  {
+    id: "ASI10",
+    risk: "Rogue Agents",
+    agt: { level: "broad", note: "Framework coverage" },
+    hex: { level: "full", note: "Ban kill-switch + anomaly detection" },
+  },
+];
 
 export default function ComparisonPage() {
   return (
@@ -150,7 +220,7 @@ export default function ComparisonPage() {
           <div className="nav-links">
             <Link href="/#frameworks">Frameworks</Link>
             <Link href="/#features">Capabilities</Link>
-            <Link href="/#faq">FAQ</Link>
+            <Link href="/roadmap">Roadmap</Link>
             <a href="https://docs.hexgate.ai" target="_blank" rel="noopener">
               Docs
             </a>
@@ -168,6 +238,7 @@ export default function ComparisonPage() {
               Book a demo
             </Link>
           </div>
+          <MobileMenu />
         </div>
       </nav>
 
@@ -257,6 +328,51 @@ export default function ComparisonPage() {
               </tbody>
             </table>
           </div>
+        </div>
+      </section>
+
+      <section className="block" style={{ paddingTop: 0 }}>
+        <div className="wrap">
+          <div className="sec-head">
+            <span className="eyebrow">OWASP Agentic Top 10</span>
+            <h2>Ten risks, item by item.</h2>
+            <p>
+              AGT advertises coverage of all ten, a broad framework and its own claim. Line them up per item and a
+              different picture shows up: Hexgate goes deep on the authorization-critical ones and slots in next to AGT
+              for the rest. &quot;Broad&quot; means framework-level coverage; &quot;Planned&quot; is on our roadmap.
+            </p>
+          </div>
+          <div className="vs-table-wrap">
+            <table className="vs-table owasp-table">
+              <thead>
+                <tr>
+                  <th scope="col">OWASP Agentic risk</th>
+                  <th scope="col">Microsoft AGT</th>
+                  <th scope="col">Hexgate</th>
+                </tr>
+              </thead>
+              <tbody>
+                {OWASP.map((r) => (
+                  <tr key={r.id}>
+                    <th scope="row">
+                      <span className="owasp-id">{r.id}</span> {r.risk}
+                    </th>
+                    <td>
+                      <CovTag level={r.agt.level} note={r.agt.note} />
+                    </td>
+                    <td>
+                      <CovTag level={r.hex.level} note={r.hex.note} />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="owasp-takeaway">
+            AGT goes wide. Hexgate goes deep on the authorization-critical risks (ASI02, ASI03, ASI10) and complements
+            AGT on the rest. Both are MIT and a one-line install, so &quot;use both&quot; is a real option, not a
+            cop-out.
+          </p>
         </div>
       </section>
 
