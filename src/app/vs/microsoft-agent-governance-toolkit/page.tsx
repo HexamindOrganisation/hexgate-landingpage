@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CopyInstall } from "../../../components/CopyInstall";
 import { MobileMenu } from "../../../components/MobileMenu";
+import { APP_URL, DEMO_HREF } from "@/lib/links";
 
 export const metadata: Metadata = {
   title:
@@ -234,9 +235,9 @@ export default function ComparisonPage() {
             >
               GitHub
             </a>
-            <Link className="btn btn-primary" href="/#book">
-              Book a demo
-            </Link>
+            <a className="btn btn-primary" href={APP_URL}>
+              Try the cloud version
+            </a>
           </div>
           <MobileMenu />
         </div>
@@ -493,11 +494,8 @@ export default function ComparisonPage() {
             </p>
             <div className="final-cta">
               <CopyInstall id="copyBtnVs" />
-              <a
-                className="btn btn-primary"
-                href="mailto:hello@hexamind.ai?subject=Hexgate%20demo%20request"
-              >
-                Book a demo
+              <a className="btn btn-primary" href={APP_URL}>
+                Try the cloud version
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"
@@ -508,6 +506,9 @@ export default function ComparisonPage() {
                 >
                   <path d="M5 12h14M13 6l6 6-6 6" />
                 </svg>
+              </a>
+              <a className="btn btn-ghost" href={DEMO_HREF}>
+                Book a demo
               </a>
             </div>
           </div>

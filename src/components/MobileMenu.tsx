@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { APP_URL } from "@/lib/links";
 
 const LINKS = [
   { href: "/#frameworks", label: "Frameworks" },
@@ -63,9 +64,9 @@ export function MobileMenu() {
           >
             GitHub
           </a>
-          <Link className="btn btn-primary" href="/#book" onClick={close}>
-            Book a demo
-          </Link>
+          <a className="btn btn-primary" href={APP_URL} onClick={close}>
+            Try the cloud version
+          </a>
         </div>
       ) : null}
     </div>
