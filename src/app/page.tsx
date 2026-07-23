@@ -5,6 +5,7 @@ import { useEffect, useRef, useSyncExternalStore, type RefObject } from "react";
 import Link from "next/link";
 import { CopyInstall } from "../components/CopyInstall";
 import { MobileMenu } from "../components/MobileMenu";
+import { APP_URL, DEMO_HREF } from "@/lib/links";
 
 const MOBILE_QUERY = "(max-width: 700px)";
 const subscribeMobile = (cb: () => void) => {
@@ -639,8 +640,8 @@ function Nav() {
             </svg>
             GitHub
           </a>
-          <a className="btn btn-primary" href="#book">
-            Book a demo
+          <a className="btn btn-primary" href={APP_URL}>
+            Try the cloud version
           </a>
         </div>
         <MobileMenu />
@@ -676,8 +677,8 @@ export default function Home() {
             </p>
             <div className="cta-row">
               <CopyInstall id="copyBtn" />
-              <a className="btn btn-primary" href="#book">
-                Book a demo
+              <a className="btn btn-primary" href={APP_URL}>
+                Try the cloud version
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"
@@ -1021,16 +1022,13 @@ export default function Home() {
               because nothing they do is unchecked.
             </h2>
             <p>
-              Install the SDK and gate your first agent in minutes, or book a walkthrough of the platform,
-              audit log, and signed-bundle workflow.
+              Install the SDK and gate your first agent in minutes, spin it up on Hexgate Cloud, or
+              book a walkthrough of the platform, audit log, and signed-bundle workflow.
             </p>
             <div className="final-cta">
               <CopyInstall id="copyBtn2" />
-              <a
-                className="btn btn-primary"
-                href="mailto:hello@hexamind.ai?subject=Hexgate%20demo%20request"
-              >
-                Book a demo
+              <a className="btn btn-primary" href={APP_URL}>
+                Try the cloud version
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"
@@ -1041,6 +1039,9 @@ export default function Home() {
                 >
                   <path d="M5 12h14M13 6l6 6-6 6" />
                 </svg>
+              </a>
+              <a className="btn btn-ghost" href={DEMO_HREF}>
+                Book a demo
               </a>
             </div>
           </div>
