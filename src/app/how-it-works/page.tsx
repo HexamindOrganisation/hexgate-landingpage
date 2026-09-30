@@ -89,16 +89,16 @@ function Arrow() {
 }
 
 const LOOP = [
-  { n: "01 / DEFINE", title: "Define", body: "You write deterministic rules for each agent, MCP server or tool.", tag: "PLATFORM" },
-  { n: "02 / FETCH", title: "Fetch", body: "The SDK pulls the signed policy bundle that applies to the agent at runtime.", tag: "SDK" },
+  { title: "Define", body: "You write deterministic rules for each agent, MCP server or tool.", tag: "Platform", owner: "platform" },
+  { title: "Fetch", body: "The SDK pulls the signed policy bundle that applies to the agent at runtime.", tag: "SDK", owner: "sdk" },
   {
-    n: "03 / ENFORCE",
     title: "Enforce",
-    body: "Each step the agent takes is checked in-process, before any tool call goes out.",
-    tag: "SDK · HOT",
+    body: "Each step the agent takes is checked in-process, before any tool or model call goes out.",
+    tag: "SDK · Hot",
+    owner: "hot",
   },
-  { n: "04 / REPORT", title: "Report", body: "Every decision (allowed, denied, held, and why) goes back to the platform.", tag: "SDK → PLATFORM" },
-  { n: "05 / IMPROVE", title: "Improve", body: "The platform flags anomalies and suggests how to change your policies.", tag: "PLATFORM · COLD" },
+  { title: "Report", body: "Every decision (allowed, denied, held, and why) goes back to the platform.", tag: "SDK → Platform", owner: "sdk" },
+  { title: "Improve", body: "The platform flags anomalies and suggests how to change your policies.", tag: "Platform · Cold", owner: "platform" },
 ];
 
 export default function HowItWorksPage() {
@@ -178,26 +178,26 @@ export default function HowItWorksPage() {
             <h2>Hexgate = SDK + Platform</h2>
             <p>Both are open source. The platform is available as SaaS on Hexgate Cloud or on-premise.</p>
           </div>
-          <div className="features">
-            <article className="feat">
-              <span className="eyebrow">The Hexgate SDK · inside your agent</span>
-              <p style={{ marginTop: 14 }}>
+          <div className="duo">
+            <article className="duo-card">
+              <span className="duo-k">The Hexgate SDK · inside your agent</span>
+              <p>
                 The SDK wraps your agent and your application logic. It fetches policies from the platform,
                 enforces them on every step and reports each decision back. You keep your agent code as it is.
               </p>
-              <p className="feat-meta">Compatible with OpenAI Agents SDK · LangChain · Google ADK · Pydantic AI</p>
-              <a className="feat-link" href="https://pypi.org/project/hexgate/" target="_blank" rel="noopener">
+              <p className="duo-meta">Compatible with OpenAI Agents SDK · LangChain · Google ADK · Pydantic AI</p>
+              <a className="duo-link" href="https://pypi.org/project/hexgate/" target="_blank" rel="noopener">
                 pypi.org/project/hexgate →
               </a>
             </article>
-            <article className="feat">
-              <span className="eyebrow">The Hexgate platform · your control center</span>
-              <p style={{ marginTop: 14 }}>
+            <article className="duo-card solid">
+              <span className="duo-k">The Hexgate platform · your control center</span>
+              <p>
                 The platform is where you define policies, watch agents live and analyze their behavior over
                 time. It runs as SaaS or on-premise.
               </p>
-              <p className="feat-meta">Open source · self-host or managed</p>
-              <a className="feat-link" href="https://github.com/HexamindOrganisation/hexgate" target="_blank" rel="noopener">
+              <p className="duo-meta">Open source · self-host or managed</p>
+              <a className="duo-link" href="https://github.com/HexamindOrganisation/hexgate" target="_blank" rel="noopener">
                 github.com/HexamindOrganisation/hexgate →
               </a>
             </article>
@@ -205,27 +205,28 @@ export default function HowItWorksPage() {
         </div>
       </section>
 
-      <section className="block" id="loop" style={{ paddingTop: 0 }}>
+      <section className="block band" id="loop">
         <div className="wrap">
-          <div className="sec-head">
+          <div className="sec-head" style={{ marginBottom: 40 }}>
             <span className="eyebrow">02 · The control loop</span>
             <h2>Five steps, on every agent run</h2>
-            <p>Updated policies flow back to step 1. The loop keeps going.</p>
           </div>
-          <div className="steps five">
-            {LOOP.map((s) => (
-              <div className="step" key={s.n}>
-                <div className="n">{s.n}</div>
-                <h4>{s.title}</h4>
+          <ol className="loop">
+            {LOOP.map((s, i) => (
+              <li className={`loop-step owner-${s.owner}`} key={s.title}>
+                <span className="loop-n">{i + 1}</span>
+                <h3>{s.title}</h3>
                 <p>{s.body}</p>
-                <span className="step-tag">{s.tag}</span>
-              </div>
+                <span className="loop-tag">{s.tag}</span>
+              </li>
             ))}
-          </div>
+          </ol>
+          <div className="loop-return" aria-hidden="true" />
+          <p className="loop-caption">Updated policies flow back to step 1. The loop keeps going.</p>
         </div>
       </section>
 
-      <section className="block" id="hot-cold" style={{ paddingTop: 0 }}>
+      <section className="block" id="hot-cold">
         <div className="wrap">
           <div className="sec-head">
             <span className="eyebrow">03 · Hot and cold governance</span>
@@ -256,15 +257,15 @@ export default function HowItWorksPage() {
         </div>
       </section>
 
-      <section className="block" id="rules" style={{ paddingTop: 0 }}>
-        <div className="wrap">
-          <div className="sec-head">
-            <span className="eyebrow">04 · Context-aware rules</span>
-            <h2>Rules that understand context</h2>
-            <p>A single policy can combine:</p>
-          </div>
-          <div className="code-grid rules">
-            <div className="ctx-list">
+      <section className="block band deep" id="rules">
+        <div className="wrap rules-split">
+          <div>
+            <div className="sec-head" style={{ marginBottom: 28 }}>
+              <span className="eyebrow">04 · Context-aware rules</span>
+              <h2>Rules that understand context</h2>
+              <p>A single policy can combine:</p>
+            </div>
+            <div className="ctx-grid">
               <div className="ctx">
                 <h4>Who</h4>
                 <p>
@@ -290,6 +291,9 @@ export default function HowItWorksPage() {
                 </p>
               </div>
             </div>
+          </div>
+          <div className="rules-code">
+            <p className="rules-k">Example rule</p>
             <div className="editor">
               <div className="editor-top">
                 <div className="dots">
@@ -311,7 +315,7 @@ export default function HowItWorksPage() {
         </div>
       </section>
 
-      <section className="block" id="dimensions" style={{ paddingTop: 0 }}>
+      <section className="block" id="dimensions">
         <div className="wrap">
           <div className="sec-head center" style={{ marginBottom: 0 }}>
             <span className="eyebrow">05 · Built for every dimension of trust</span>

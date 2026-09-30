@@ -2483,37 +2483,6 @@ footer {
   padding-bottom: 6px;
   border-bottom: 1.5px dashed var(--line-2);
 }
-.feat .feat-meta {
-  margin-top: 16px;
-  font-family: var(--font-ibm-plex-mono), ui-monospace, monospace;
-  font-size: 12.5px;
-  color: var(--tx-2);
-}
-.feat-link {
-  display: inline-block;
-  margin-top: 12px;
-  font-weight: 600;
-  font-size: 15px;
-  color: var(--blue-bright);
-}
-.feat-link:hover {
-  color: var(--tx);
-}
-.code-grid.rules {
-  grid-template-columns: 0.75fr 1.25fr;
-}
-.steps.five {
-  grid-template-columns: repeat(5, 1fr);
-  margin-top: 0;
-}
-.step-tag {
-  display: inline-block;
-  margin-top: 14px;
-  font-family: var(--font-ibm-plex-mono), ui-monospace, monospace;
-  font-size: 11.5px;
-  letter-spacing: 0.08em;
-  color: var(--tx-2);
-}
 .hc-list {
   list-style: none;
   display: flex;
@@ -2531,11 +2500,6 @@ footer {
   position: absolute;
   left: 0;
   color: var(--blue-bright);
-}
-.ctx-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
 }
 .ctx {
   padding: 18px 20px;
@@ -2575,10 +2539,6 @@ footer {
     flex-direction: row;
     justify-content: center;
     padding: 0;
-  }
-  .steps.five,
-  .code-grid.rules {
-    grid-template-columns: 1fr;
   }
 }
 @media (max-width: 560px) {
@@ -3523,5 +3483,235 @@ footer {
   .post-card,
   .featured-art .post-art {
     transition: none;
+  }
+}
+
+/* ---------- HOW IT WORKS: sections ---------- */
+section.block.band {
+  background: var(--bg-1);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+section.block.band.deep {
+  background:
+    radial-gradient(ellipse 60% 80% at 100% 0%, rgba(59, 130, 246, 0.16), transparent 70%),
+    linear-gradient(180deg, #0c1330 0%, #0a0f24 100%);
+  border-color: rgba(59, 130, 246, 0.18);
+}
+
+.duo {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.duo-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 34px 34px 32px;
+  border-radius: 16px;
+  border: 1px solid var(--line-2);
+  background: var(--panel);
+}
+.duo-card.solid {
+  background:
+    radial-gradient(ellipse 70% 90% at 100% 0%, rgba(34, 211, 238, 0.12), transparent 70%),
+    linear-gradient(160deg, #111a44 0%, #0c1233 100%);
+  border-color: rgba(96, 165, 250, 0.3);
+}
+.duo-k {
+  font-family: var(--font-ibm-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--blue-bright);
+}
+.duo-card.solid .duo-k {
+  color: var(--allow);
+}
+.duo-card p {
+  color: var(--tx-1);
+  font-size: 1.04rem;
+  line-height: 1.6;
+}
+.duo-card.solid p {
+  color: #d6dcf0;
+}
+.duo-card p.duo-meta {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--tx-2);
+}
+.duo-card.solid p.duo-meta {
+  color: #9aa6cf;
+}
+.duo-link {
+  margin-top: auto;
+  font-family: var(--font-ibm-plex-mono), ui-monospace, monospace;
+  font-size: 13px;
+  color: var(--blue-bright);
+}
+.duo-card.solid .duo-link {
+  color: var(--allow);
+}
+.duo-link:hover {
+  color: var(--tx);
+}
+
+.loop {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 36px;
+}
+.loop-step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 22px 20px 20px;
+  border-radius: 14px;
+  border: 1px solid var(--line-2);
+  background: var(--panel);
+}
+.loop-step + .loop-step::before {
+  content: "→";
+  position: absolute;
+  left: -27px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: var(--tx-3);
+}
+.loop-n {
+  font-family: var(--font-hanken-grotesk), system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 1.9rem;
+  line-height: 1;
+  color: var(--blue-bright);
+  margin-bottom: 8px;
+}
+.loop-step.owner-platform .loop-n {
+  color: var(--allow);
+}
+.loop-step h3 {
+  font-family: var(--font-hanken-grotesk), system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 1.12rem;
+}
+.loop-step p {
+  color: var(--tx-1);
+  font-size: 0.93rem;
+  line-height: 1.5;
+  flex: 1;
+}
+.loop-tag {
+  margin-top: 10px;
+  font-family: var(--font-ibm-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--blue-bright);
+}
+.loop-step.owner-platform .loop-tag {
+  color: var(--allow);
+}
+.loop-step.owner-hot {
+  background: linear-gradient(165deg, #1b3a8a 0%, #13235a 100%);
+  border-color: rgba(96, 165, 250, 0.55);
+  box-shadow: 0 18px 40px -18px rgba(59, 130, 246, 0.6);
+}
+.loop-step.owner-hot .loop-n,
+.loop-step.owner-hot .loop-tag {
+  color: var(--hold);
+}
+.loop-step.owner-hot p {
+  color: #dbe4ff;
+}
+.loop-return {
+  height: 34px;
+  margin: 0 10%;
+  border: 1.5px dashed rgba(255, 255, 255, 0.16);
+  border-top: 0;
+  border-radius: 0 0 14px 14px;
+  position: relative;
+}
+.loop-return::after {
+  content: "";
+  position: absolute;
+  left: -6px;
+  top: -2px;
+  border: 5px solid transparent;
+  border-bottom: 7px solid rgba(255, 255, 255, 0.3);
+  border-top: 0;
+}
+.loop-caption {
+  margin-top: 14px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--tx-2);
+}
+
+.rules-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 56px;
+  align-items: center;
+}
+.ctx-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.band.deep .ctx {
+  background: rgba(22, 32, 80, 0.65);
+  border-color: rgba(96, 165, 250, 0.2);
+}
+.rules-k {
+  font-family: var(--font-ibm-plex-mono), ui-monospace, monospace;
+  font-size: 11.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--tx-2);
+  margin-bottom: 12px;
+}
+.band.deep .editor {
+  background: #080c1f;
+  border-color: rgba(96, 165, 250, 0.25);
+}
+
+@media (max-width: 1080px) {
+  .loop {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 30px;
+    max-width: 560px;
+  }
+  .loop-step + .loop-step::before {
+    content: "↓";
+    left: 28px;
+    top: -26px;
+    transform: none;
+  }
+  .loop-return {
+    display: none;
+  }
+  .loop-caption {
+    text-align: left;
+    max-width: 560px;
+  }
+  .rules-split {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
+  }
+}
+@media (max-width: 700px) {
+  .duo {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .duo-card {
+    padding: 26px 22px;
+  }
+  .ctx-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
