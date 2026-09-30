@@ -7,6 +7,7 @@ import { CopyInstall } from "../components/CopyInstall";
 import { MobileMenu } from "../components/MobileMenu";
 import { ByHexamind, HexamindBand } from "../components/Hexamind";
 import { ControlLoop } from "../components/ControlLoop";
+import { AuditAnalyze } from "../components/AuditAnalyze";
 import { APP_URL, DEMO_HREF } from "@/lib/links";
 
 const MOBILE_QUERY = "(max-width: 700px)";
@@ -19,28 +20,6 @@ const getMobileSnapshot = () => window.matchMedia(MOBILE_QUERY).matches;
 const getMobileServerSnapshot = () => false;
 
 type Verdict = "allow" | "deny" | "hold";
-type DecisionEvent = {
-  role: string;
-  tool: string;
-  args: string;
-  verdict: Verdict;
-  reason?: string;
-};
-
-const EVENTS: DecisionEvent[] = [
-  { role: "member", tool: "web_search", args: '"Q3 refund policy"', verdict: "allow" },
-  { role: "billing", tool: "refund_order", args: 'amount=200, currency="USD"', verdict: "allow" },
-  { role: "billing", tool: "refund_order", args: "amount=600", verdict: "deny", reason: "args.amount <= 500" },
-  { role: "support", tool: "delete_user", args: '"u_8842"', verdict: "deny", reason: "not allowed for role support" },
-  { role: "admin", tool: "wire_transfer", args: "amount=50000", verdict: "hold", reason: "awaiting human approval" },
-  { role: "member", tool: "read_file", args: '"policy.yaml"', verdict: "allow" },
-  { role: "support", tool: "issue_credit", args: "amount=25", verdict: "allow" },
-  { role: "member", tool: "edit_file", args: '"prod.env"', verdict: "deny", reason: "default_policy: deny" },
-];
-
-const VLABEL: Record<Verdict, string> = { allow: "ALLOW", deny: "DENY", hold: "APPROVAL" };
-const VCLASS: Record<Verdict, string> = { allow: "v-allow", deny: "v-deny", hold: "v-hold" };
-const MAX_ROWS = 5;
 
 const GATE_PATHS: Record<Verdict, string> = {
   allow: "M190,220 H500 C586,220 660,88 798,88",
@@ -110,48 +89,6 @@ function HexMark() {
   );
 }
 
-function LiveFeed() {
-  const feedRef = useRef<HTMLDivElement>(null);
-  const indexRef = useRef(0);
-
-  useEffect(() => {
-    const feed = feedRef.current;
-    if (!feed) return;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    const push = (instant: boolean) => {
-      const ev = EVENTS[indexRef.current % EVENTS.length];
-      indexRef.current += 1;
-
-      const row = document.createElement("div");
-      row.className = "row";
-      const reason = ev.reason ? `<span class="reason">↳ ${ev.reason}</span>` : "";
-      row.innerHTML =
-        `<span class="role">${ev.role}</span>` +
-        `<span class="call"><span class="tool">${ev.tool}</span><span class="args">(${ev.args})</span>${reason}</span>` +
-        `<span class="verdict ${VCLASS[ev.verdict]}"><span class="vd"></span>${VLABEL[ev.verdict]}</span>`;
-
-      if (!reduce && !instant) {
-        row.classList.add("entering");
-        feed.appendChild(row);
-        window.setTimeout(() => row.classList.remove("entering"), 30);
-      } else {
-        feed.appendChild(row);
-      }
-
-      while (feed.children.length > MAX_ROWS) {
-        feed.removeChild(feed.firstChild!);
-      }
-    };
-
-    for (let s = 0; s < MAX_ROWS; s += 1) push(true);
-    if (reduce) return;
-    const id = window.setInterval(() => push(false), 2100);
-    return () => window.clearInterval(id);
-  }, []);
-
-  return <div className="feed" ref={feedRef} />;
-}
 
 type GateRefs = {
   stage: RefObject<HTMLDivElement | null>;
@@ -587,33 +524,6 @@ function Faq() {
   );
 }
 
-function AuditConsole() {
-  return (
-    <div className="console" style={{ maxWidth: 920, margin: "0 auto" }} aria-label="Live policy decision stream">
-      <div className="console-top">
-        <div className="dots">
-          <i />
-          <i />
-          <i />
-        </div>
-        <span className="fn">
-          <b>PolicyEnforcer</b>.decide(role, tool, args)
-        </span>
-        <span className="live">
-          <span className="blink" /> live
-        </span>
-      </div>
-      <LiveFeed />
-      <div className="console-bottom">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-          <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" />
-        </svg>
-        every decision streamed to the audit log
-      </div>
-    </div>
-  );
-}
 
 function BlindSpotRings() {
   return (
@@ -1035,21 +945,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="block" id="audit" style={{ paddingTop: 40, paddingBottom: 0 }}>
-        <div className="wrap">
-          <div className="sec-head">
-            <span className="eyebrow">Live audit feed</span>
-            <h2>Every decision, on the record.</h2>
-            <p>
-              Past the gate, each verdict streams to an append-only log: the caller&apos;s role, the
-              tool, the outcome, and the exact constraint behind it.
-            </p>
-          </div>
-          <AuditConsole />
-        </div>
-      </section>
 
-      <section className="block" id="code" style={{ paddingTop: 0 }}>
+      <section className="block" id="code" style={{ paddingTop: 96 }}>
         <div className="wrap">
           <div className="sec-head">
             <span className="eyebrow">Quickstart</span>
@@ -1141,6 +1038,21 @@ export default function Home() {
             <span className="tk">✓</span> Identical decisions in dev (in-process) and prod (signed
             WASM), proven by a parity test suite.
           </p>
+        </div>
+      </section>
+
+      <section className="block" id="audit" style={{ paddingTop: 40 }}>
+        <div className="wrap">
+          <div className="sec-head">
+            <span className="eyebrow">Audit · analyze · act</span>
+            <h2>See every decision. Catch what&apos;s off. Stop it in one&nbsp;click.</h2>
+            <p>
+              Every verdict streams to an append-only audit log with the rule behind it. Hexgate watches that stream,
+              flags anomalies like a user suddenly racking up denials, and gives you a kill-switch: ban the user or the
+              agent, and the next run is refused before the model executes.
+            </p>
+          </div>
+          <AuditAnalyze />
         </div>
       </section>
 
