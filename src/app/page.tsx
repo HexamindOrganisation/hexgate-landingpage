@@ -942,7 +942,7 @@ export default function Home() {
           <div className="sec-head">
             <span className="eyebrow">The answer</span>
             <h2>Hexgate sits inside the&nbsp;agent.</h2>
-            <p>So it knows exactly what the layers around it can&apos;t:</p>
+            <p>From inside, it sees what firewalls, guardrails and MCP gateways can&apos;t:</p>
           </div>
           <ul className="answers">
             <li>
