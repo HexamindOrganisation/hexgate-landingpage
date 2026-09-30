@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Hexgate — AI agent authorization and policy enforcement";
+export const alt = "Hexgate by Hexamind — take back control of your AI agents";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -66,7 +66,7 @@ export default function OpengraphImage() {
               maxWidth: 980,
             }}
           >
-            AI agent authorization & policy enforcement
+            Take back control of your AI agents.
           </div>
           <div
             style={{
@@ -76,7 +76,7 @@ export default function OpengraphImage() {
               lineHeight: 1.35,
             }}
           >
-            Gate every tool call — allow, deny, or approval. Local, signed, audited. MIT.
+            Open-source agent governance: deterministic rules, enforced in real time, analyzed live and after the fact.
           </div>
         </div>
 
@@ -90,7 +90,7 @@ export default function OpengraphImage() {
         >
           <div>● MIT licensed</div>
           <div>● Signed WASM bundle</div>
-          <div>● Deny-by-default</div>
+          <div>● by Hexamind</div>
         </div>
       </div>
     ),

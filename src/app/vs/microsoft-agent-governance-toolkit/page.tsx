@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CopyInstall } from "../../../components/CopyInstall";
 import { MobileMenu } from "../../../components/MobileMenu";
+import { ByHexamind, HexamindBand } from "../../../components/Hexamind";
 import { APP_URL, DEMO_HREF } from "@/lib/links";
 
 export const metadata: Metadata = {
@@ -198,29 +199,32 @@ export default function ComparisonPage() {
 
       <nav className="site-nav scrolled" id="nav">
         <div className="nav-inner">
-          <Link className="brand" href="/" aria-label="Hexgate home">
-            <svg className="mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-              <path
-                d="M16 2.5 27.5 9v14L16 29.5 4.5 23V9L16 2.5Z"
-                stroke="#3b82f6"
-                strokeWidth="1.6"
-                fill="rgba(59,130,246,0.08)"
-              />
-              <path
-                d="M16 9.5 21.5 12.7v6.6L16 22.5 10.5 19.3v-6.6L16 9.5Z"
-                stroke="#60a5fa"
-                strokeWidth="1.4"
-                fill="none"
-              />
-              <circle cx="16" cy="16" r="2.1" fill="#60a5fa" />
-            </svg>
-            <span className="brand-name">
-              Hex<b>gate</b>
-            </span>
-          </Link>
+          <div className="brand-lockup">
+            <Link className="brand" href="/" aria-label="Hexgate home">
+              <svg className="mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                <path
+                  d="M16 2.5 27.5 9v14L16 29.5 4.5 23V9L16 2.5Z"
+                  stroke="#3b82f6"
+                  strokeWidth="1.6"
+                  fill="rgba(59,130,246,0.08)"
+                />
+                <path
+                  d="M16 9.5 21.5 12.7v6.6L16 22.5 10.5 19.3v-6.6L16 9.5Z"
+                  stroke="#60a5fa"
+                  strokeWidth="1.4"
+                  fill="none"
+                />
+                <circle cx="16" cy="16" r="2.1" fill="#60a5fa" />
+              </svg>
+              <span className="brand-name">
+                Hex<b>gate</b>
+              </span>
+            </Link>
+            <ByHexamind />
+          </div>
           <div className="nav-links">
-            <Link href="/#frameworks">Frameworks</Link>
             <Link href="/#features">Capabilities</Link>
+            <Link href="/how-it-works">How it works</Link>
             <Link href="/roadmap">Roadmap</Link>
             <a href="https://docs.hexgate.ai" target="_blank" rel="noopener">
               Docs
@@ -514,6 +518,8 @@ export default function ComparisonPage() {
           </div>
         </div>
       </section>
+
+      <HexamindBand />
 
       <footer>
         <div className="wrap">

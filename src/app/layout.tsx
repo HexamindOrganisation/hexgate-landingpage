@@ -19,10 +19,12 @@ const ibmPlexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://hexgate.ai"),
-  title: "Per-User Authorization for AI Agents | Hexgate",
+  title: "Hexgate: Open-Source AI Agent Governance & Per-User Authorization",
   description:
-    "Per-user, per-tool authorization for AI agents. Wrap your OpenAI Agents, LangChain, Google ADK, or Pydantic AI agent in one line. Every tool call is gated by role, enforced in-process from a signed WASM bundle, audited end to end. MIT.",
+    "Take back control of your AI agents. Hexgate enforces deterministic, per-user rules on every tool call in real time, with live and after-the-fact analysis of everything your agents do. Wraps OpenAI Agents, LangChain, Google ADK, or Pydantic AI in one line. Open source by Hexamind.",
   keywords: [
+    "AI agent governance",
+    "open-source agent governance",
     "per-user AI agent authorization",
     "multi-tenant AI agent",
     "on-behalf-of LLM agent",
@@ -46,15 +48,15 @@ export const metadata: Metadata = {
     type: "website",
     url: "https://hexgate.ai/",
     siteName: "Hexgate",
-    title: "Per-User Authorization for AI Agents | Hexgate",
+    title: "Hexgate: Open-Source AI Agent Governance & Per-User Authorization",
     description:
-      "One agent, many users, each gated by their own role. Per-request user identity threaded through every tool call, enforced from a signed WASM bundle, audited end to end.",
+      "Deterministic rules that enforce what your agents can do in real time, per user and per tool call, with live and after-the-fact analysis. Open source by Hexamind.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Per-User Authorization for AI Agents | Hexgate",
+    title: "Hexgate: Open-Source AI Agent Governance & Per-User Authorization",
     description:
-      "One agent, many users, each gated by their own role. Per-request user identity threaded through every tool call.",
+      "Deterministic, per-user rules on every tool call, with live and after-the-fact analysis. Open source by Hexamind.",
   },
 };
 
@@ -66,22 +68,24 @@ const jsonLd = {
       "@id": "https://hexgate.ai/#sdk",
       name: "Hexgate",
       applicationCategory: "DeveloperApplication",
-      applicationSubCategory: "Authorization SDK for AI agents",
+      applicationSubCategory: "AI agent governance and authorization",
       operatingSystem: "Linux, macOS, Windows",
       description:
-        "Per-user authorization SDK for AI agents. Wraps OpenAI Agents, LangChain, Google ADK, or Pydantic AI without rewrite; every tool call is gated by a deny-by-default policy enforced in-process from a signed WASM bundle.",
+        "Open-source governance for AI agents: an SDK that enforces deterministic, per-user policy on every tool call, and a platform for live and after-the-fact analysis. Wraps OpenAI Agents, LangChain, Google ADK, or Pydantic AI without rewrite; policy is enforced in-process from a signed WASM bundle.",
       url: "https://hexgate.ai/",
       downloadUrl: "https://pypi.org/project/hexgate/",
       codeRepository: "https://github.com/HexamindOrganisation/hexgate",
       license: "https://opensource.org/licenses/MIT",
       offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
       publisher: { "@id": "https://hexamind.ai/#org" },
+      creator: { "@id": "https://hexamind.ai/#org" },
     },
     {
       "@type": "Organization",
       "@id": "https://hexamind.ai/#org",
       name: "Hexamind",
       url: "https://hexamind.ai/",
+      description: "Hexamind is the company behind Hexgate, the open-source governance layer for AI agents.",
       logo: "https://hexgate.ai/icon.svg",
       sameAs: ["https://github.com/HexamindOrganisation"],
     },

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CopyInstall } from "../../components/CopyInstall";
 import { MobileMenu } from "../../components/MobileMenu";
+import { ByHexamind, HexamindBand } from "../../components/Hexamind";
 import { APP_URL, demoHref } from "@/lib/links";
 
 export const metadata: Metadata = {
@@ -138,15 +139,18 @@ export default function RoadmapPage() {
     <>
       <nav className="site-nav scrolled" id="nav">
         <div className="nav-inner">
-          <Link className="brand" href="/" aria-label="Hexgate home">
-            <Mark />
-            <span className="brand-name">
-              Hex<b>gate</b>
-            </span>
-          </Link>
+          <div className="brand-lockup">
+            <Link className="brand" href="/" aria-label="Hexgate home">
+              <Mark />
+              <span className="brand-name">
+                Hex<b>gate</b>
+              </span>
+            </Link>
+            <ByHexamind />
+          </div>
           <div className="nav-links">
-            <Link href="/#frameworks">Frameworks</Link>
             <Link href="/#features">Capabilities</Link>
+            <Link href="/how-it-works">How it works</Link>
             <Link href="/roadmap" aria-current="page">
               Roadmap
             </Link>
@@ -563,6 +567,8 @@ export default function RoadmapPage() {
         </div>
       </section>
 
+      <HexamindBand />
+
       <footer>
         <div className="wrap">
           <div className="foot-inner">
@@ -574,6 +580,7 @@ export default function RoadmapPage() {
             </Link>
             <div className="foot-links">
               <Link href="/">Home</Link>
+              <Link href="/how-it-works">How it works</Link>
               <Link href="/roadmap">Roadmap</Link>
               <a href="https://github.com/HexamindOrganisation/hexgate" target="_blank" rel="noopener">
                 GitHub

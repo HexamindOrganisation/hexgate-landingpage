@@ -5,8 +5,8 @@ import Link from "next/link";
 import { APP_URL } from "@/lib/links";
 
 const LINKS = [
-  { href: "/#frameworks", label: "Frameworks" },
   { href: "/#features", label: "Capabilities" },
+  { href: "/how-it-works", label: "How it works" },
   { href: "/roadmap", label: "Roadmap" },
 ];
 
@@ -63,6 +63,9 @@ export function MobileMenu() {
             onClick={close}
           >
             GitHub
+          </a>
+          <a href="https://hexamind.ai" target="_blank" rel="noopener" onClick={close}>
+            By Hexamind
           </a>
           <a className="btn btn-primary" href={APP_URL} onClick={close}>
             Try the cloud version
