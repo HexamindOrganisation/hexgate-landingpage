@@ -103,6 +103,14 @@ const jsonLd = {
         },
         {
           "@type": "Question",
+          name: "How is Hexgate different from guardrails, firewalls or an MCP gateway?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Those sit around the agent. Firewalls and proxies see network traffic, guardrails filter prompts and outputs, and MCP gateways see which tools get called. None of them know who the end user is, what the agent is meant to do, or its state in the current turn. Hexgate runs inside the agent and decides each tool call against the caller's role, the actual arguments and the turn's context, before it runs. It complements those layers rather than replacing them.",
+          },
+        },
+        {
+          "@type": "Question",
           name: "Does gating every call add latency or a network round-trip?",
           acceptedAnswer: {
             "@type": "Answer",
