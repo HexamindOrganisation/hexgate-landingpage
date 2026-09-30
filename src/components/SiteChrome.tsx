@@ -31,7 +31,7 @@ export function SubNav({ current }: { current?: Section }) {
           <ByHexamind />
         </div>
         <div className="nav-links">
-          <Link href="/#features">Capabilities</Link>
+          <Link href="/#governance">Capabilities</Link>
           <Link href="/how-it-works" {...cur("how-it-works")}>
             How it works
           </Link>

@@ -149,7 +149,7 @@ export default function RoadmapPage() {
             <ByHexamind />
           </div>
           <div className="nav-links">
-            <Link href="/#features">Capabilities</Link>
+            <Link href="/#governance">Capabilities</Link>
             <Link href="/how-it-works">How it works</Link>
             <Link href="/roadmap" aria-current="page">
               Roadmap

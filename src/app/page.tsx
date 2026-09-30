@@ -6,6 +6,8 @@ import Link from "next/link";
 import { CopyInstall } from "../components/CopyInstall";
 import { MobileMenu } from "../components/MobileMenu";
 import { ByHexamind, HexamindBand } from "../components/Hexamind";
+import { ControlLoop } from "../components/ControlLoop";
+import { AuditAnalyze } from "../components/AuditAnalyze";
 import { APP_URL, DEMO_HREF } from "@/lib/links";
 
 const MOBILE_QUERY = "(max-width: 700px)";
@@ -18,28 +20,6 @@ const getMobileSnapshot = () => window.matchMedia(MOBILE_QUERY).matches;
 const getMobileServerSnapshot = () => false;
 
 type Verdict = "allow" | "deny" | "hold";
-type DecisionEvent = {
-  role: string;
-  tool: string;
-  args: string;
-  verdict: Verdict;
-  reason?: string;
-};
-
-const EVENTS: DecisionEvent[] = [
-  { role: "member", tool: "web_search", args: '"Q3 refund policy"', verdict: "allow" },
-  { role: "billing", tool: "refund_order", args: 'amount=200, currency="USD"', verdict: "allow" },
-  { role: "billing", tool: "refund_order", args: "amount=600", verdict: "deny", reason: "args.amount <= 500" },
-  { role: "support", tool: "delete_user", args: '"u_8842"', verdict: "deny", reason: "not allowed for role support" },
-  { role: "admin", tool: "wire_transfer", args: "amount=50000", verdict: "hold", reason: "awaiting human approval" },
-  { role: "member", tool: "read_file", args: '"policy.yaml"', verdict: "allow" },
-  { role: "support", tool: "issue_credit", args: "amount=25", verdict: "allow" },
-  { role: "member", tool: "edit_file", args: '"prod.env"', verdict: "deny", reason: "default_policy: deny" },
-];
-
-const VLABEL: Record<Verdict, string> = { allow: "ALLOW", deny: "DENY", hold: "APPROVAL" };
-const VCLASS: Record<Verdict, string> = { allow: "v-allow", deny: "v-deny", hold: "v-hold" };
-const MAX_ROWS = 5;
 
 const GATE_PATHS: Record<Verdict, string> = {
   allow: "M190,220 H500 C586,220 660,88 798,88",
@@ -109,48 +89,6 @@ function HexMark() {
   );
 }
 
-function LiveFeed() {
-  const feedRef = useRef<HTMLDivElement>(null);
-  const indexRef = useRef(0);
-
-  useEffect(() => {
-    const feed = feedRef.current;
-    if (!feed) return;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    const push = (instant: boolean) => {
-      const ev = EVENTS[indexRef.current % EVENTS.length];
-      indexRef.current += 1;
-
-      const row = document.createElement("div");
-      row.className = "row";
-      const reason = ev.reason ? `<span class="reason">↳ ${ev.reason}</span>` : "";
-      row.innerHTML =
-        `<span class="role">${ev.role}</span>` +
-        `<span class="call"><span class="tool">${ev.tool}</span><span class="args">(${ev.args})</span>${reason}</span>` +
-        `<span class="verdict ${VCLASS[ev.verdict]}"><span class="vd"></span>${VLABEL[ev.verdict]}</span>`;
-
-      if (!reduce && !instant) {
-        row.classList.add("entering");
-        feed.appendChild(row);
-        window.setTimeout(() => row.classList.remove("entering"), 30);
-      } else {
-        feed.appendChild(row);
-      }
-
-      while (feed.children.length > MAX_ROWS) {
-        feed.removeChild(feed.firstChild!);
-      }
-    };
-
-    for (let s = 0; s < MAX_ROWS; s += 1) push(true);
-    if (reduce) return;
-    const id = window.setInterval(() => push(false), 2100);
-    return () => window.clearInterval(id);
-  }, []);
-
-  return <div className="feed" ref={feedRef} />;
-}
 
 type GateRefs = {
   stage: RefObject<HTMLDivElement | null>;
@@ -586,33 +524,6 @@ function Faq() {
   );
 }
 
-function AuditConsole() {
-  return (
-    <div className="console" style={{ maxWidth: 920, margin: "0 auto" }} aria-label="Live policy decision stream">
-      <div className="console-top">
-        <div className="dots">
-          <i />
-          <i />
-          <i />
-        </div>
-        <span className="fn">
-          <b>PolicyEnforcer</b>.decide(role, tool, args)
-        </span>
-        <span className="live">
-          <span className="blink" /> live
-        </span>
-      </div>
-      <LiveFeed />
-      <div className="console-bottom">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-          <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" />
-        </svg>
-        every decision streamed to the audit log
-      </div>
-    </div>
-  );
-}
 
 function BlindSpotRings() {
   return (
@@ -669,7 +580,7 @@ function Nav() {
           <ByHexamind />
         </div>
         <div className="nav-links">
-          <a href="#features">Capabilities</a>
+          <a href="#governance">Capabilities</a>
           <Link href="/how-it-works">How it works</Link>
           <Link href="/roadmap">Roadmap</Link>
           <Link href="/blog">Blog</Link>
@@ -938,6 +849,7 @@ export default function Home() {
       </section>
 
       <section className="block" id="governance" style={{ paddingTop: 16, paddingBottom: 0 }}>
+        <span id="features" className="anchor-alias" aria-hidden="true" />
         <div className="wrap">
           <div className="sec-head">
             <span className="eyebrow">The answer</span>
@@ -1016,121 +928,25 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="block" id="audit" style={{ paddingTop: 40, paddingBottom: 0 }}>
+      <section className="block" id="loop" style={{ paddingTop: 72, paddingBottom: 0 }}>
         <div className="wrap">
           <div className="sec-head">
-            <span className="eyebrow">Live audit feed</span>
-            <h2>Every decision, on the record.</h2>
+            <span className="eyebrow">How it works</span>
+            <h2>Five steps, on every agent&nbsp;run.</h2>
             <p>
-              Past the gate, each verdict streams to an append-only log: the caller&apos;s role, the
-              tool, the outcome, and the exact constraint behind it.
+              Per-user authorization, enforced in-process from a signed WASM bundle on every tool call. Every decision
+              feeds back into better policy.
             </p>
           </div>
-          <AuditConsole />
+          <ControlLoop compact />
+          <Link className="pillar-link loop-more" href="/how-it-works#loop">
+            See the full walkthrough →
+          </Link>
         </div>
       </section>
 
-      <section className="block" id="features">
-        <div className="wrap">
-          <div className="sec-head">
-            <span className="eyebrow">The control plane for agentic systems</span>
-            <h2>Authorization that travels with every&nbsp;tool&nbsp;call.</h2>
-            <p>
-              The capability you give an agent is the capability it can be jailbroken into using.
-              Hexgate sits at that boundary and turns it into four primitives you can edit, version,
-              and audit.
-            </p>
-          </div>
-          <div className="features">
-            <article className="feat">
-              <div className="feat-ico">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M9 12l2 2 4-4" />
-                  <path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z" />
-                </svg>
-              </div>
-              <h3>Policy enforcement</h3>
-              <p>
-                Deny-by-default. Every tool call returns a typed <code>Decision</code> (allow, deny,
-                or approval-required), evaluated against the caller&apos;s role at call time.
-              </p>
-            </article>
-            <article className="feat">
-              <div className="feat-ico">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />
-                  <path d="m9 12 2 2 4-4" />
-                </svg>
-              </div>
-              <h3>Signed bundles, local speed</h3>
-              <p>
-                The signed WASM bundle is fetched <b>once per run</b> and enforced in-process. No
-                security service on the hot path, no round-trip per decision. Fast by design,
-                verified before it&apos;s trusted.
-              </p>
-            </article>
-            <article className="feat">
-              <div className="feat-ico">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="12" cy="8" r="4" />
-                  <path d="M4 21c0-3.5 3.6-6 8-6s8 2.5 8 6" />
-                </svg>
-              </div>
-              <h3>Per-user authorization, not per-agent</h3>
-              <p>
-                Biscuit tokens carry <em>who</em> is calling; role policies decide <em>what</em>
-                they can do. One wrapped agent serves every user: same code, different effective
-                permissions per request. Other governance toolkits gate the agent. Hexgate gates the
-                user, through the agent.
-              </p>
-            </article>
-            <article className="feat">
-              <div className="feat-ico">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M3 3v18h18" />
-                  <path d="m7 14 3-3 3 3 5-6" />
-                </svg>
-              </div>
-              <h3>Audit trail</h3>
-              <p>
-                Every decision streams to the audit log: who acted, which tool, the verdict, and
-                the exact constraint that allowed or blocked it. When someone asks why a call went
-                through, you can show them the line.
-              </p>
-            </article>
-          </div>
-        </div>
-      </section>
 
-      <section className="block" id="code" style={{ paddingTop: 0 }}>
+      <section className="block" id="code" style={{ paddingTop: 96 }}>
         <div className="wrap">
           <div className="sec-head">
             <span className="eyebrow">Quickstart</span>
@@ -1222,34 +1038,21 @@ export default function Home() {
             <span className="tk">✓</span> Identical decisions in dev (in-process) and prod (signed
             WASM), proven by a parity test suite.
           </p>
+        </div>
+      </section>
 
-          <div className="steps">
-            <div className="step">
-              <div className="n">01 / WRAP</div>
-              <h4>Keep your agent</h4>
-              <p>
-                OpenAI, LangChain, Google ADK, or Pydantic AI: wrap it once. Your original object is
-                left untouched.
-              </p>
-            </div>
-            <div className="step">
-              <div className="n">02 / DECIDE</div>
-              <h4>Gate every call</h4>
-              <p>
-                Each tool invocation resolves the caller&apos;s role and returns allow, deny, or
-                approval-required. Denials come back as tool results the model can react to, so a
-                blocked call doesn&apos;t abort the run.
-              </p>
-            </div>
-            <div className="step">
-              <div className="n">03 / PROVE</div>
-              <h4>Audit it all</h4>
-              <p>
-                Decisions stream to the log with the exact constraint behind each verdict. Hot-reload
-                policy without a restart.
-              </p>
-            </div>
+      <section className="block" id="audit" style={{ paddingTop: 40 }}>
+        <div className="wrap">
+          <div className="sec-head">
+            <span className="eyebrow">Audit · analyze · act</span>
+            <h2>See every decision. Catch what&apos;s off. Stop it in one&nbsp;click.</h2>
+            <p>
+              Every verdict streams to an append-only audit log with the rule behind it. Hexgate watches that stream,
+              flags anomalies like a user suddenly racking up denials, and gives you a kill-switch: ban the user or the
+              agent, and the next run is refused before the model executes.
+            </p>
           </div>
+          <AuditAnalyze />
         </div>
       </section>
 
@@ -1320,7 +1123,7 @@ export default function Home() {
                 PyPI
               </a>
               <a href="#frameworks">Frameworks</a>
-              <a href="#features">Capabilities</a>
+              <a href="#governance">Capabilities</a>
               <Link href="/how-it-works">How it works</Link>
               <Link href="/blog">Blog</Link>
               <a href="#faq">FAQ</a>
