@@ -230,29 +230,14 @@ nav.site-nav.scrolled {
   gap: 56px;
   align-items: center;
 }
-.pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
+.kicker {
   font-family: var(--font-ibm-plex-mono), ui-monospace, monospace;
   font-size: 12.5px;
-  color: var(--tx-1);
-  border: 1px solid var(--line-2);
-  border-radius: 100px;
-  padding: 6px 13px 6px 11px;
-  margin-bottom: 26px;
-  background: rgba(255, 255, 255, 0.025);
-}
-.pill .dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--allow);
-  box-shadow: 0 0 10px var(--allow);
-}
-.pill b {
-  color: var(--tx);
-  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--blue-bright);
+  font-weight: 500;
+  margin-bottom: 22px;
 }
 
 h1 {
@@ -892,8 +877,8 @@ footer {
 .hero-lead .trust {
   justify-content: center;
 }
-.hero-lead .pill {
-  margin-bottom: 24px;
+.hero-lead .kicker {
+  margin-bottom: 22px;
 }
 
 /* ---------- HERO GATE DIAGRAM ---------- */

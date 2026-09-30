@@ -153,9 +153,7 @@ export default function HowItWorksPage() {
         <div className="grid-bg" />
         <div className="wrap">
           <div className="hero-lead">
-            <span className="pill">
-              <span className="dot" /> How it works
-            </span>
+            <p className="kicker">How it works</p>
             <h1>
               Every agent decision,
               <br />

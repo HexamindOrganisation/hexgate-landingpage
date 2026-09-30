@@ -665,9 +665,7 @@ export default function Home() {
         <div className="grid-bg" />
         <div className="wrap">
           <div className="hero-lead">
-            <span className="pill">
-              <span className="dot" /> <b>Open-source</b> agent governance
-            </span>
+            <p className="kicker">Open-source agent governance</p>
             <h1>
               Take back control
               <br />

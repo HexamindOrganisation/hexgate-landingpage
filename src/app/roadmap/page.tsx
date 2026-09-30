@@ -174,9 +174,7 @@ export default function RoadmapPage() {
         <div className="glow" />
         <div className="grid-bg" />
         <div className="wrap" style={{ position: "relative", zIndex: 1, maxWidth: 860 }}>
-          <span className="pill">
-            <span className="dot" /> Roadmap · updated July 2026
-          </span>
+          <p className="kicker">Roadmap · updated July 2026</p>
           <h1>
             What&apos;s shipped,
             <br />

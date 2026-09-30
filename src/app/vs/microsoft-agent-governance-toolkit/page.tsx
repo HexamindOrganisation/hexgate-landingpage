@@ -251,9 +251,7 @@ export default function ComparisonPage() {
         <div className="glow" />
         <div className="grid-bg" />
         <div className="wrap" style={{ position: "relative", zIndex: 1, maxWidth: 900 }}>
-          <span className="pill">
-            <span className="dot" /> Comparison · updated June 2026
-          </span>
+          <p className="kicker">Comparison · updated June 2026</p>
           <h1>
             Hexgate vs Microsoft Agent Governance&nbsp;Toolkit.
             <br />
