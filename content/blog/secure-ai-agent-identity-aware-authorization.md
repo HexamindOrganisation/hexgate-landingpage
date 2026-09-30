@@ -69,7 +69,7 @@ This reads your agent and ships a manifest to the platform: the name, the model,
 
 ![The Hexgate dashboard showing the registered devops_agent manifest and its three tools: read_logs, restart_service and scale_deployment](/blog/agent-registered.png "The registered agent and every tool it can call.")
 
-## Write the policy — on the platform, not in the code
+## Write the policy on the platform, not in the code
 
 Now the team's security lead opens the policy editor and writes down who's allowed to do what. No pull request, no redeploy, no waiting on the developer who built the agent. Here's the policy she lands on to separate a day-to-day operator from an admin:
 
@@ -113,11 +113,11 @@ roles:
 
 ![The Hexgate policy editor with devops_agent/policy.yaml open, defining the read_only, operator and admin roles](/blog/policy-editor.png "The same policy, edited and validated on the platform.")
 
-The detail worth pausing on is that the gate reads the *arguments*, not just the tool name. An operator can restart services — but only in dev or staging, because of `args.env in ["dev", "staging"]`. Scale, sure, up to ten replicas. An admin gets the same tools with the ceilings raised. And everything defaults to `deny`, so a tool nobody thought to mention is simply off. You opt into capabilities; you never have to remember to opt out.
+The detail worth pausing on is that the gate reads the *arguments*, not just the tool name. An operator can restart services, but only in dev or staging, because of `args.env in ["dev", "staging"]`. Scale, sure, up to ten replicas. An admin gets the same tools with the ceilings raised. And everything defaults to `deny`, so a tool nobody thought to mention is simply off. You opt into capabilities; you never have to remember to opt out.
 
-The developer never touches this file. That's the whole point — the security lead owns it, and when the rules need to change, they change on her screen, not in anyone's repo.
+The developer never touches this file. That's the whole point: the security lead owns it, and when the rules need to change, they change on her screen, not in anyone's repo.
 
-## Enforce it — two lines
+## Enforce it in two lines
 
 This is the agent before Hexgate does anything:
 
@@ -131,7 +131,7 @@ result = await runner.run(
 )
 ```
 
-And *after* — swap `Runner` for `HexgateRunner`, and pass a `HexgateContext`:
+And *after*, with `Runner` swapped for `HexgateRunner` and a `HexgateContext` passed in:
 
 ```python title="after.py"
 from hexgate.adapters.openai import HexgateRunner
@@ -147,19 +147,19 @@ result = await runner.run(
 )
 ```
 
-That's it. The `user_roles` aren't hardcoded in real life — you pull them from whoever is actually logged in. So the interesting thing is what happens when the same sentence comes from two different people.
+That's it. In real life the `user_roles` aren't hardcoded; you pull them from whoever is actually logged in. So the interesting thing is what happens when the same sentence comes from two different people.
 
 Olivia, the operator, asks again:
 
 > "Check the logs of the web service in prod, then restart it."
 
-The agent reads the logs — everyone's allowed that — and then stops. The restart fails the `args.env in ["dev", "staging"]` check and comes back denied. Her lead types the exact same sentence as an admin and the service bounces. Run it twice in a row, changing nothing but `user_roles=`, and it's a little startling the first time.
+The agent reads the logs, which everyone is allowed to do, and then stops. The restart fails the `args.env in ["dev", "staging"]` check and comes back denied. Her lead types the exact same sentence as an admin and the service bounces. Run it twice in a row, changing nothing but `user_roles=`, and it's a little startling the first time.
 
 The replica cap behaves the same way:
 
 > "Scale the search service to 50 replicas in staging."
 
-An operator gets turned down — staging's fine, but fifty blows past their limit of ten. The admin's request goes through; fifty is nowhere near their cap of two hundred.
+An operator gets turned down: staging is fine, but fifty blows past their limit of ten. The admin's request goes through; fifty is nowhere near their cap of two hundred.
 
 ![The Hexgate audit view: the operator's prod restart and 50-replica scale-up are denied with the failing constraint shown, while the admin's identical requests are allowed](/blog/decision-log.png "Same sentence, different caller: every verdict lands in the audit log with its reason.")
 
