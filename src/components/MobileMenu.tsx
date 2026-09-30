@@ -5,7 +5,7 @@ import Link from "next/link";
 import { APP_URL } from "@/lib/links";
 
 const LINKS = [
-  { href: "/#features", label: "Capabilities" },
+  { href: "/#governance", label: "Capabilities" },
   { href: "/how-it-works", label: "How it works" },
   { href: "/roadmap", label: "Roadmap" },
   { href: "/blog", label: "Blog" },

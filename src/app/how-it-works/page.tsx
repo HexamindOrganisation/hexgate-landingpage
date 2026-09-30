@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { CopyInstall } from "../../components/CopyInstall";
 import { HexamindBand } from "../../components/Hexamind";
 import { SubNav, SiteFooter } from "../../components/SiteChrome";
+import { ControlLoop } from "../../components/ControlLoop";
+import Link from "next/link";
 import { APP_URL, demoHref } from "@/lib/links";
 
 export const metadata: Metadata = {
@@ -88,18 +90,6 @@ function Arrow() {
   );
 }
 
-const LOOP = [
-  { n: "01 / DEFINE", title: "Define", body: "You write deterministic rules for each agent, MCP server or tool.", tag: "PLATFORM" },
-  { n: "02 / FETCH", title: "Fetch", body: "The SDK pulls the signed policy bundle that applies to the agent at runtime.", tag: "SDK" },
-  {
-    n: "03 / ENFORCE",
-    title: "Enforce",
-    body: "Each step the agent takes is checked in-process, before any tool call goes out.",
-    tag: "SDK · HOT",
-  },
-  { n: "04 / REPORT", title: "Report", body: "Every decision (allowed, denied, held, and why) goes back to the platform.", tag: "SDK → PLATFORM" },
-  { n: "05 / IMPROVE", title: "Improve", body: "The platform flags anomalies and suggests how to change your policies.", tag: "PLATFORM · COLD" },
-];
 
 export default function HowItWorksPage() {
   return (
@@ -212,16 +202,7 @@ export default function HowItWorksPage() {
             <h2>Five steps, on every agent run</h2>
             <p>Updated policies flow back to step 1. The loop keeps going.</p>
           </div>
-          <div className="steps five">
-            {LOOP.map((s) => (
-              <div className="step" key={s.n}>
-                <div className="n">{s.n}</div>
-                <h4>{s.title}</h4>
-                <p>{s.body}</p>
-                <span className="step-tag">{s.tag}</span>
-              </div>
-            ))}
-          </div>
+          <ControlLoop />
         </div>
       </section>
 
@@ -308,23 +289,9 @@ export default function HowItWorksPage() {
               </pre>
             </div>
           </div>
-        </div>
-      </section>
-
-      <section className="block" id="dimensions" style={{ paddingTop: 0 }}>
-        <div className="wrap">
-          <div className="sec-head center" style={{ marginBottom: 0 }}>
-            <span className="eyebrow">05 · Built for every dimension of trust</span>
-          </div>
-          <div className="dims" style={{ marginTop: 8 }}>
-            <div className="dims-row">
-              <span className="dim">Security</span>
-              <span className="dim">Integrity</span>
-              <span className="dim">Usage</span>
-              <span className="dim">Performance</span>
-              <span className="dim">Compliance</span>
-            </div>
-          </div>
+          <p className="bridge">
+            Ready to wire it in? <Link href="/#code">See the quickstart →</Link>
+          </p>
         </div>
       </section>
 

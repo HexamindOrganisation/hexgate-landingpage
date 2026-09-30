@@ -3875,3 +3875,58 @@ footer {
 .blind-note a:hover {
   text-decoration-color: var(--blue-bright);
 }
+
+/* shared control loop */
+ol.steps {
+  list-style: none;
+}
+.steps.five.compact .step {
+  display: flex;
+  flex-direction: column;
+}
+.steps.five.compact .step-tag {
+  margin-top: auto;
+  padding-top: 18px;
+}
+.loop-more {
+  display: inline-block;
+  margin-top: 22px;
+}
+.bridge {
+  margin-top: 24px;
+  color: var(--tx-2);
+  font-size: 15px;
+}
+.bridge a {
+  color: var(--blue-bright);
+  font-weight: 600;
+}
+.bridge a:hover {
+  color: var(--tx);
+}
+.anchor-alias {
+  position: absolute;
+  top: 0;
+}
+@media (max-width: 940px) {
+  .steps.five.compact {
+    gap: 10px;
+  }
+  .steps.five.compact .step {
+    flex-direction: row;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+    padding: 14px 18px;
+  }
+  .steps.five.compact .step .n {
+    margin-bottom: 0;
+  }
+  .steps.five.compact .step h4 {
+    margin-bottom: 0;
+  }
+  .steps.five.compact .step-tag {
+    margin: 0 0 0 auto;
+    padding-top: 0;
+  }
+}
