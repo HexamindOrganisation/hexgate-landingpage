@@ -54,7 +54,7 @@ That check doesn't belong to the model. It doesn't belong to the developer who h
 
 Hexgate is the layer that's missing here. If you've set up Langfuse, you already know the shape of this: sign up, create a project, mint an API key, paste it into your `.env` as `HEXGATE_API_KEY`.
 
-![The Hexgate platform's Tokens page with a freshly minted dev token for the demo project](/blog/api-key.png "Mint a key on the platform, then drop it in your .env.")
+![The Hexgate platform's Tokens page with a freshly minted dev token for the demo project](/blog/api-key.webp "Mint a key on the platform, then drop it in your .env.")
 
 Back to the code.
 
@@ -67,7 +67,7 @@ hexgate register --agent devops_openai:agent
 
 This reads your agent and ships a manifest to the platform: the name, the model, the system prompt, and the part that matters here: every tool it can call. The agent shows up in the dashboard with all three tools laid out. Seeing `restart_service` and `scale_deployment` sitting there in a list, owned by nobody in particular, is its own small wake-up call.
 
-![The Hexgate dashboard showing the registered devops_agent manifest and its three tools: read_logs, restart_service and scale_deployment](/blog/agent-registered.png "The registered agent and every tool it can call.")
+![The Hexgate dashboard showing the registered devops_agent manifest and its three tools: read_logs, restart_service and scale_deployment](/blog/agent-registered.webp "The registered agent and every tool it can call.")
 
 ## Write the policy on the platform, not in the code
 
@@ -111,7 +111,7 @@ roles:
           - 'args.replicas <= 200'
 ```
 
-![The Hexgate policy editor with devops_agent/policy.yaml open, defining the read_only, operator and admin roles](/blog/policy-editor.png "The same policy, edited and validated on the platform.")
+![The Hexgate policy editor with devops_agent/policy.yaml open, defining the read_only, operator and admin roles](/blog/policy-editor.webp "The same policy, edited and validated on the platform.")
 
 The detail worth pausing on is that the gate reads the *arguments*, not just the tool name. An operator can restart services, but only in dev or staging, because of `args.env in ["dev", "staging"]`. Scale, sure, up to ten replicas. An admin gets the same tools with the ceilings raised. And everything defaults to `deny`, so a tool nobody thought to mention is simply off. You opt into capabilities; you never have to remember to opt out.
 
@@ -161,7 +161,7 @@ The replica cap behaves the same way:
 
 An operator gets turned down: staging is fine, but fifty blows past their limit of ten. The admin's request goes through; fifty is nowhere near their cap of two hundred.
 
-![The Hexgate audit view: the operator's prod restart and 50-replica scale-up are denied with the failing constraint shown, while the admin's identical requests are allowed](/blog/decision-log.png "Same sentence, different caller: every verdict lands in the audit log with its reason.")
+![The Hexgate audit view: the operator's prod restart and 50-replica scale-up are denied with the failing constraint shown, while the admin's identical requests are allowed](/blog/decision-log.webp "Same sentence, different caller: every verdict lands in the audit log with its reason.")
 
 The Python is byte-for-byte identical across both. The only thing that moved was who was asking.
 
