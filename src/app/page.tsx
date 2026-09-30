@@ -912,7 +912,7 @@ export default function Home() {
               <ul className="unknowns">
                 <li>
                   <span className="qhex" aria-hidden="true">?</span>
-                  What it&apos;s meant to do
+                  What the agent is meant to do
                 </li>
                 <li>
                   <span className="qhex" aria-hidden="true">?</span>
@@ -920,7 +920,7 @@ export default function Home() {
                 </li>
                 <li>
                   <span className="qhex" aria-hidden="true">?</span>
-                  Its goal, its context, its internal state
+                  The agent&apos;s goal, context and internal state
                 </li>
               </ul>
               <p className="nothing">Nothing.</p>
@@ -948,7 +948,7 @@ export default function Home() {
             <li>
               <span className="ahex" aria-hidden="true">✓</span>
               <div>
-                <b>What it&apos;s meant to do</b>
+                <b>What the agent is meant to do</b>
                 <span>A deny-by-default policy for every agent, tool and MCP server.</span>
               </div>
             </li>
@@ -962,7 +962,7 @@ export default function Home() {
             <li>
               <span className="ahex" aria-hidden="true">✓</span>
               <div>
-                <b>Its goal, context and state</b>
+                <b>The agent&apos;s goal, context and internal state</b>
                 <span>
                   Rules on who asked, the turn and the clock: <code>role</code>, <code>turn.tokens</code>,{" "}
                   <code>now.*</code>.
