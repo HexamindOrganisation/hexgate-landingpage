@@ -3525,3 +3525,353 @@ footer {
     transition: none;
   }
 }
+
+/* ---------- WHY HEXGATE: risk · blind spot · answer ---------- */
+.risk-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.risk-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 32px;
+  border-radius: 16px;
+  border: 1px solid var(--line-2);
+  background: var(--panel);
+}
+.risk-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.risk-when {
+  font-family: var(--font-ibm-plex-mono), ui-monospace, monospace;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--blue-bright);
+}
+.risk-when.summer {
+  color: var(--hold);
+}
+.risk-tag {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 100px;
+  border: 1px solid;
+}
+.risk-tag.adversarial {
+  color: var(--blue-bright);
+  border-color: rgba(96, 165, 250, 0.45);
+  background: var(--blue-soft);
+}
+.risk-tag.benign {
+  color: var(--hold);
+  border-color: rgba(245, 165, 36, 0.45);
+  background: var(--hold-bg);
+}
+.risk-card h3 {
+  font-family: var(--font-hanken-grotesk), system-ui, sans-serif;
+  font-weight: 600;
+  font-size: clamp(1.5rem, 2.4vw, 1.9rem);
+  letter-spacing: -0.02em;
+}
+.risk-card p {
+  color: var(--tx-1);
+  font-size: 1.03rem;
+  line-height: 1.6;
+}
+.risk-facts {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  font-family: var(--font-ibm-plex-mono), ui-monospace, monospace;
+  font-size: 12.5px;
+  color: var(--tx-1);
+}
+.risk-facts li::before {
+  content: "▸ ";
+  color: var(--blue-bright);
+}
+.risk-log {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: #0b0d13;
+  border: 1px solid var(--line-2);
+  font-family: var(--font-ibm-plex-mono), ui-monospace, monospace;
+}
+.risk-log-k {
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tx-3);
+}
+.risk-log-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.risk-log-row code {
+  font-size: 13px;
+  color: var(--tx);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.risk-log-why {
+  font-size: 12px;
+  color: var(--tx-2);
+}
+.risk-card p.risk-src {
+  margin-top: auto;
+  font-size: 13px;
+  color: var(--tx-2);
+}
+.risk-src a {
+  color: var(--tx-1);
+  text-decoration: underline;
+  text-decoration-color: var(--line-2);
+  text-underline-offset: 3px;
+}
+.risk-src a:hover {
+  color: var(--tx);
+}
+.risk-band {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding: 30px 36px;
+  border-radius: 16px;
+  background: linear-gradient(120deg, #13235a 0%, #0d1638 100%);
+  border: 1px solid rgba(96, 165, 250, 0.35);
+}
+.risk-band p {
+  font-family: var(--font-hanken-grotesk), system-ui, sans-serif;
+  font-size: clamp(1.2rem, 2vw, 1.55rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: #d6dcf0;
+  max-width: 760px;
+}
+.risk-band p b {
+  color: #fff;
+  font-weight: 600;
+}
+.risk-band a {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--blue-bright);
+  white-space: nowrap;
+}
+.risk-band a:hover {
+  color: var(--tx);
+}
+
+.blind {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+  gap: 64px;
+  align-items: center;
+}
+.rings {
+  width: 100%;
+  max-width: 460px;
+  height: auto;
+  margin: 0 auto;
+  display: block;
+}
+.ring {
+  stroke-width: 1;
+}
+.ring.r1 {
+  fill: rgba(255, 255, 255, 0.018);
+  stroke: rgba(255, 255, 255, 0.1);
+}
+.ring.r2 {
+  fill: rgba(255, 255, 255, 0.03);
+  stroke: rgba(255, 255, 255, 0.12);
+}
+.ring.core {
+  fill: #13235a;
+  stroke: rgba(96, 165, 250, 0.55);
+  stroke-width: 1.5;
+}
+.ring-pulse {
+  fill: none;
+  stroke: rgba(245, 165, 36, 0.5);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 6;
+  transform-origin: 240px 240px;
+  animation: ring-spin 40s linear infinite;
+}
+@keyframes ring-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.ring-label {
+  font-family: var(--font-hanken-grotesk), system-ui, sans-serif;
+  font-size: 15px;
+  fill: var(--tx-2);
+}
+.ring-core-label {
+  font-family: var(--font-hanken-grotesk), system-ui, sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  fill: #fff;
+}
+.ring-core-sub {
+  font-family: var(--font-ibm-plex-mono), ui-monospace, monospace;
+  font-size: 11px;
+  fill: #8fa3d8;
+}
+.blind-copy h3 {
+  font-family: var(--font-hanken-grotesk), system-ui, sans-serif;
+  font-weight: 600;
+  font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+  letter-spacing: -0.02em;
+  margin-bottom: 26px;
+}
+.unknowns,
+.answers {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.unknowns li {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-size: 1.15rem;
+  color: var(--tx);
+}
+.qhex,
+.ahex {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 40px;
+  font-family: var(--font-ibm-plex-mono), ui-monospace, monospace;
+  font-weight: 700;
+  font-size: 15px;
+  clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+}
+.qhex {
+  color: var(--hold);
+  background: var(--hold-bg);
+}
+.nothing {
+  margin-top: 30px;
+  font-family: var(--font-hanken-grotesk), system-ui, sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.6rem, 5vw, 3.8rem);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--hold);
+}
+.blind-note {
+  margin-top: 16px;
+  max-width: 520px;
+  color: var(--tx-1);
+  font-size: 1.02rem;
+  line-height: 1.6;
+}
+
+.answers {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.answers li {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid rgba(45, 212, 167, 0.22);
+  background: linear-gradient(160deg, rgba(45, 212, 167, 0.06), transparent 60%), var(--panel);
+}
+.ahex {
+  color: var(--allow);
+  background: var(--allow-bg);
+}
+.answers li div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.answers b {
+  font-weight: 600;
+  color: var(--tx);
+}
+.answers span {
+  color: var(--tx-1);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+.answers code {
+  font-family: var(--font-ibm-plex-mono), ui-monospace, monospace;
+  font-size: 0.85em;
+  color: var(--blue-bright);
+}
+
+@media (max-width: 940px) {
+  .risk-grid,
+  .blind,
+  .answers {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .blind {
+    gap: 40px;
+  }
+  .rings {
+    max-width: 360px;
+  }
+}
+@media (max-width: 560px) {
+  .risk-card {
+    padding: 24px 20px;
+  }
+  .risk-top {
+    flex-wrap: wrap;
+  }
+  .risk-band {
+    padding: 24px 20px;
+  }
+  .risk-band a {
+    white-space: normal;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ring-pulse {
+    animation: none;
+  }
+}
+.blind-note a {
+  color: var(--blue-bright);
+  text-decoration: underline;
+  text-decoration-color: rgba(96, 165, 250, 0.35);
+  text-underline-offset: 3px;
+}
+.blind-note a:hover {
+  text-decoration-color: var(--blue-bright);
+}

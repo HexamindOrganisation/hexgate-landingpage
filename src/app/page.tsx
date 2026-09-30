@@ -490,6 +490,18 @@ const FAQS: FaqItem[] = [
     ),
   },
   {
+    q: "How is Hexgate different from guardrails, firewalls or an MCP gateway?",
+    body: (
+      <p>
+        Those sit <em>around</em> the agent. Firewalls and proxies see network traffic, guardrails filter prompts and
+        outputs, and MCP gateways see which tools get called. None of them know who the end user is, what the agent is
+        meant to do, or its state in the current turn. Hexgate runs <b>inside</b> the agent and decides each tool call
+        against the caller&apos;s role, the actual arguments and the turn&apos;s context, before it runs. It complements
+        those layers rather than replacing them.
+      </p>
+    ),
+  },
+  {
     q: "Does gating every call add latency or a network round-trip?",
     body: (
       <p>
@@ -599,6 +611,38 @@ function AuditConsole() {
         every decision streamed to the audit log
       </div>
     </div>
+  );
+}
+
+function BlindSpotRings() {
+  return (
+    <svg
+      className="rings"
+      viewBox="0 0 480 480"
+      role="img"
+      aria-labelledby="rings-title"
+    >
+      <title id="rings-title">
+        Today&apos;s security layers sit around the agent: firewalls and proxies on the outside, guardrails and MCP
+        gateways inside them, and the agent itself in the middle, unseen.
+      </title>
+      <circle className="ring r1" cx="240" cy="240" r="232" />
+      <circle className="ring r2" cx="240" cy="240" r="166" />
+      <circle className="ring-pulse" cx="240" cy="240" r="100" />
+      <circle className="ring core" cx="240" cy="240" r="96" />
+      <text className="ring-label" x="240" y="44" textAnchor="middle">
+        Firewalls · proxies
+      </text>
+      <text className="ring-label" x="240" y="108" textAnchor="middle">
+        Guardrails · MCP gateways
+      </text>
+      <text className="ring-core-label" x="240" y="236" textAnchor="middle">
+        Your agent
+      </text>
+      <text className="ring-core-sub" x="240" y="262" textAnchor="middle">
+        goal · context · state
+      </text>
+    </svg>
   );
 }
 
@@ -767,8 +811,165 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="block" id="governance" style={{ paddingTop: 40, paddingBottom: 0 }}>
+      <section className="block" id="risk" style={{ paddingTop: 72 }}>
         <div className="wrap">
+          <div className="sec-head">
+            <span className="eyebrow">The risk</span>
+            <h2>The risk is real, and it doesn&apos;t need an&nbsp;attacker.</h2>
+            <p>
+              Two AI agent security incidents from 2026 show both sides of the problem: models that can attack on
+              their own, and agents that cause a breach just by chasing their goal.
+            </p>
+          </div>
+          <div className="risk-grid">
+            <article className="risk-card">
+              <div className="risk-top">
+                <span className="risk-when">Spring 2026</span>
+                <span className="risk-tag adversarial">Adversarial</span>
+              </div>
+              <h3>Mythos</h3>
+              <p>
+                Anthropic&apos;s Claude Mythos Preview found and exploited zero-days on its own across major operating
+                systems and browsers. It showed how far AI-powered attacks could go, and kept security teams up at
+                night.
+              </p>
+              <ul className="risk-facts">
+                <li>Autonomous vulnerability discovery and exploitation</li>
+                <li>Withheld from public release</li>
+              </ul>
+              <p className="risk-src">
+                Sources:{" "}
+                <a href="https://www.anthropic.com/research/mythos-preview" target="_blank" rel="noopener noreferrer">
+                  Anthropic
+                </a>
+                ,{" "}
+                <a
+                  href="https://www.isaca.org/resources/news-and-trends/industry-news/2026/claude-mythos-is-redefining-the-cyberthreat-landscape"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  ISACA
+                </a>
+              </p>
+            </article>
+            <article className="risk-card">
+              <div className="risk-top">
+                <span className="risk-when summer">Summer 2026</span>
+                <span className="risk-tag benign">No malicious intent</span>
+              </div>
+              <h3>OpenAI agent × Hugging Face</h3>
+              <p>
+                An OpenAI agent, trying to ace a benchmark, broke out of its sandbox and compromised Hugging
+                Face&apos;s infrastructure to steal the answers. No attacker, no malice, just a goal.
+              </p>
+              <div className="risk-log" aria-label="Illustrative policy decision">
+                <span className="risk-log-k">Per-agent policy, illustrative</span>
+                <div className="risk-log-row">
+                  <span className="verdict v-deny">DENY</span>
+                  <code>http_request(host=&quot;huggingface.co&quot;)</code>
+                </div>
+                <span className="risk-log-why">↳ host not in this agent&apos;s allowed egress</span>
+              </div>
+              <p className="risk-src">
+                Sources:{" "}
+                <a href="https://huggingface.co/blog/agent-intrusion-technical-timeline" target="_blank" rel="noopener noreferrer">
+                  Hugging Face
+                </a>
+                ,{" "}
+                <a href="https://openai.com/index/hugging-face-incident-and-the-road-ahead/" target="_blank" rel="noopener noreferrer">
+                  OpenAI
+                </a>
+                ,{" "}
+                <a
+                  href="https://fortune.com/2026/07/21/openai-says-ai-models-escaped-control-hacked-hugging-face/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Fortune
+                </a>
+              </p>
+            </article>
+          </div>
+          <div className="risk-band">
+            <p>
+              The danger doesn&apos;t only come from adversaries. <b>It can come from your own agents.</b>
+            </p>
+            <Link href="/blog/2026-year-of-security-for-ai-agents">Why 2026 is the year of agent security →</Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="block" id="blind-spot">
+        <div className="wrap">
+          <div className="sec-head">
+            <span className="eyebrow">The blind spot</span>
+            <h2>Today&apos;s security sits around the&nbsp;agent.</h2>
+          </div>
+          <div className="blind">
+            <BlindSpotRings />
+            <div className="blind-copy">
+              <h3>What do they know about your agent?</h3>
+              <ul className="unknowns">
+                <li>
+                  <span className="qhex" aria-hidden="true">?</span>
+                  What it&apos;s meant to do
+                </li>
+                <li>
+                  <span className="qhex" aria-hidden="true">?</span>
+                  What&apos;s borderline, and what&apos;s out of bounds
+                </li>
+                <li>
+                  <span className="qhex" aria-hidden="true">?</span>
+                  Its goal, its context, its internal state
+                </li>
+              </ul>
+              <p className="nothing">Nothing.</p>
+              <p className="blind-note">
+                Firewalls, guardrails and MCP gateways see traffic and text, not intent. They can&apos;t tell a
+                legitimate refund from a hijacked one. That gap is where{" "}
+                <Link href="/blog/owasp-top-10-agentic-applications-explained">
+                  privilege abuse and rogue agents
+                </Link>{" "}
+                live.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="block" id="governance" style={{ paddingTop: 16, paddingBottom: 0 }}>
+        <div className="wrap">
+          <div className="sec-head">
+            <span className="eyebrow">The answer</span>
+            <h2>Hexgate sits inside the&nbsp;agent.</h2>
+            <p>So it knows exactly what the layers around it can&apos;t:</p>
+          </div>
+          <ul className="answers">
+            <li>
+              <span className="ahex" aria-hidden="true">✓</span>
+              <div>
+                <b>What it&apos;s meant to do</b>
+                <span>A deny-by-default policy for every agent, tool and MCP server.</span>
+              </div>
+            </li>
+            <li>
+              <span className="ahex" aria-hidden="true">✓</span>
+              <div>
+                <b>What&apos;s borderline, and what&apos;s out of bounds</b>
+                <span>Allow, approval or deny, decided on the call&apos;s actual arguments.</span>
+              </div>
+            </li>
+            <li>
+              <span className="ahex" aria-hidden="true">✓</span>
+              <div>
+                <b>Its goal, context and state</b>
+                <span>
+                  Rules on who asked, the turn and the clock: <code>role</code>, <code>turn.tokens</code>,{" "}
+                  <code>now.*</code>.
+                </span>
+              </div>
+            </li>
+          </ul>
           <div className="pillars">
             <article className="pillar">
               <span className="eyebrow">01 · Enforce</span>
