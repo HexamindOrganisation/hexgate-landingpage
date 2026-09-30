@@ -5,6 +5,7 @@ import { useEffect, useRef, useSyncExternalStore, type RefObject } from "react";
 import Link from "next/link";
 import { CopyInstall } from "../components/CopyInstall";
 import { MobileMenu } from "../components/MobileMenu";
+import { ByHexamind, HexamindBand } from "../components/Hexamind";
 import { APP_URL, DEMO_HREF } from "@/lib/links";
 
 const MOBILE_QUERY = "(max-width: 700px)";
@@ -614,16 +615,20 @@ function Nav() {
   return (
     <nav ref={navRef} className="site-nav" id="nav">
       <div className="nav-inner">
-        <a className="brand" href="#top" aria-label="Hexgate home">
-          <HexMark />
-          <span className="brand-name">
-            Hex<b>gate</b>
-          </span>
-        </a>
+        <div className="brand-lockup">
+          <a className="brand" href="#top" aria-label="Hexgate home">
+            <HexMark />
+            <span className="brand-name">
+              Hex<b>gate</b>
+            </span>
+          </a>
+          <ByHexamind />
+        </div>
         <div className="nav-links">
-          <a href="#frameworks">Frameworks</a>
           <a href="#features">Capabilities</a>
-          <a href="/roadmap">Roadmap</a>
+          <Link href="/how-it-works">How it works</Link>
+          <Link href="/roadmap">Roadmap</Link>
+          <Link href="/blog">Blog</Link>
           <a href="https://docs.hexgate.ai" target="_blank" rel="noopener">
             Docs
           </a>
@@ -661,19 +666,15 @@ export default function Home() {
         <div className="grid-bg" />
         <div className="wrap">
           <div className="hero-lead">
-            <span className="pill">
-              <span className="dot" /> Enforced locally · <b>zero added latency</b>
-            </span>
+            <p className="kicker">Open-source agent governance</p>
             <h1>
-              Per-user authorization for AI&nbsp;agents.
+              Take back control
               <br />
-              <span className="accent">Gate what they do, not just what they&nbsp;say.</span>
+              <span className="accent">of your AI&nbsp;agents.</span>
             </h1>
             <p className="lede">
-              One agent, many users, each gated by their own role. Hexgate carries{" "}
-              <b>per-request user identity</b> through every tool call, with policy enforced{" "}
-              <b>in-process from a signed WASM bundle</b>. Fine-grained control with zero added
-              latency on the critical path.
+              <b>Deterministic rules</b> that enforce what your agents can do in real time, per user
+              and per tool call, with <b>live and after-the-fact analysis</b> of everything they do.
             </p>
             <div className="cta-row">
               <CopyInstall id="copyBtn" />
@@ -690,6 +691,9 @@ export default function Home() {
                   <path d="M5 12h14M13 6l6 6-6 6" />
                 </svg>
               </a>
+              <Link className="btn btn-ghost" href="/how-it-works">
+                See how it works
+              </Link>
             </div>
             <div className="trust">
               <span>
@@ -759,6 +763,54 @@ export default function Home() {
               Pydantic AI
             </span>
             <span className="fw native">+ any native runtime</span>
+          </div>
+        </div>
+      </section>
+
+      <section className="block" id="governance" style={{ paddingTop: 40, paddingBottom: 0 }}>
+        <div className="wrap">
+          <div className="pillars">
+            <article className="pillar">
+              <span className="eyebrow">01 · Enforce</span>
+              <h3>Access control inside the agent</h3>
+              <p>
+                Hexgate checks every step the agent takes against your policy, so each tool call is
+                authorized before it runs, for the user who asked, not just at login.
+              </p>
+              <div className="chips">
+                <span className="chip c-allow">allow</span>
+                <span className="chip c-deny">deny</span>
+                <span className="chip c-hold">approval</span>
+              </div>
+              <Link className="pillar-link" href="/how-it-works#loop">
+                How enforcement works →
+              </Link>
+            </article>
+            <article className="pillar alt">
+              <span className="eyebrow">02 · Analyze</span>
+              <h3>Hot and cold analysis</h3>
+              <p>
+                Live monitoring while agents run, and a deep review afterwards. Hexgate flags
+                anomalies in agent behavior and suggests the policy changes that would stop them.
+              </p>
+              <div className="chips">
+                <span className="chip c-hot">Hot · live</span>
+                <span className="chip c-cold">Cold · after the fact</span>
+              </div>
+              <Link className="pillar-link" href="/how-it-works#hot-cold">
+                How analysis works →
+              </Link>
+            </article>
+          </div>
+          <div className="dims">
+            <p className="dims-label">One control layer for</p>
+            <div className="dims-row">
+              <span className="dim">Security</span>
+              <span className="dim">Integrity</span>
+              <span className="dim">Usage</span>
+              <span className="dim">Performance</span>
+              <span className="dim">Compliance</span>
+            </div>
           </div>
         </div>
       </section>
@@ -1048,6 +1100,8 @@ export default function Home() {
         </div>
       </section>
 
+      <HexamindBand />
+
       <footer>
         <div className="wrap">
           <div className="foot-inner">
@@ -1066,6 +1120,8 @@ export default function Home() {
               </a>
               <a href="#frameworks">Frameworks</a>
               <a href="#features">Capabilities</a>
+              <Link href="/how-it-works">How it works</Link>
+              <Link href="/blog">Blog</Link>
               <a href="#faq">FAQ</a>
               <Link href="/vs/microsoft-agent-governance-toolkit">vs Microsoft AGT</Link>
               <a href="#book">Book a demo</a>
