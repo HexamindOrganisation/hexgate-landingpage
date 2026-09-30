@@ -8,6 +8,7 @@ const LINKS = [
   { href: "/#features", label: "Capabilities" },
   { href: "/how-it-works", label: "How it works" },
   { href: "/roadmap", label: "Roadmap" },
+  { href: "/blog", label: "Blog" },
 ];
 
 export function MobileMenu() {

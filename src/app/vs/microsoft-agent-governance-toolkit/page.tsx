@@ -226,6 +226,7 @@ export default function ComparisonPage() {
             <Link href="/#features">Capabilities</Link>
             <Link href="/how-it-works">How it works</Link>
             <Link href="/roadmap">Roadmap</Link>
+            <Link href="/blog">Blog</Link>
             <a href="https://docs.hexgate.ai" target="_blank" rel="noopener">
               Docs
             </a>
@@ -544,6 +545,7 @@ export default function ComparisonPage() {
             </Link>
             <div className="foot-links">
               <Link href="/">Home</Link>
+              <Link href="/blog">Blog</Link>
               <a href="https://github.com/HexamindOrganisation/hexgate" target="_blank" rel="noopener">
                 GitHub
               </a>

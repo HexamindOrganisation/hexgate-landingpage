@@ -628,6 +628,7 @@ function Nav() {
           <a href="#features">Capabilities</a>
           <Link href="/how-it-works">How it works</Link>
           <Link href="/roadmap">Roadmap</Link>
+          <Link href="/blog">Blog</Link>
           <a href="https://docs.hexgate.ai" target="_blank" rel="noopener">
             Docs
           </a>
@@ -1120,6 +1121,7 @@ export default function Home() {
               <a href="#frameworks">Frameworks</a>
               <a href="#features">Capabilities</a>
               <Link href="/how-it-works">How it works</Link>
+              <Link href="/blog">Blog</Link>
               <a href="#faq">FAQ</a>
               <Link href="/vs/microsoft-agent-governance-toolkit">vs Microsoft AGT</Link>
               <a href="#book">Book a demo</a>
