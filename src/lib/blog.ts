@@ -37,10 +37,10 @@ export const AUTHORS: Record<string, Author> = {
 // width/height (no layout shift, better Core Web Vitals).
 const IMAGE_SIZES: Record<string, [number, number]> = {
   "/blog/comic.png": [1086, 1448],
-  "/blog/api-key.png": [3420, 2214],
-  "/blog/agent-registered.png": [1920, 1080],
-  "/blog/policy-editor.png": [1920, 1080],
-  "/blog/decision-log.png": [1920, 1080],
+  "/blog/api-key.webp": [1440, 932],
+  "/blog/agent-registered.webp": [1440, 810],
+  "/blog/policy-editor.webp": [1440, 810],
+  "/blog/decision-log.webp": [1440, 810],
 };
 
 export type TocItem = { id: string; text: string; depth: 2 | 3 };
