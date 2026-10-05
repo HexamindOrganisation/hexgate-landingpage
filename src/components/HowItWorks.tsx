@@ -74,7 +74,7 @@ export function ArchDiagram() {
           </div>
         </div>
         <span className="arch-note">
-          <b>Enforces on every step</b>, in-process, no round-trip
+          <b>Checks each step</b> in-process, with no network round-trip
         </span>
       </div>
       <div className="arch-links" aria-hidden="true">
@@ -109,8 +109,8 @@ export function ComponentCards() {
         <span className="eyebrow">Hexgate SDK · Enforce</span>
         <h3>Access control inside the agent</h3>
         <p>
-          The SDK wraps your agent and checks every step against your policy, so each tool call is authorized before
-          it runs, for the user who asked, not just at login. You keep your agent code as it is.
+          The SDK wraps your agent and checks each tool call against your policy before it runs, using the identity
+          of the user who asked. Your agent code stays as it is.
         </p>
         <div className="chips">
           <span className="chip c-allow">allow</span>
@@ -131,8 +131,8 @@ export function ComponentCards() {
         <span className="eyebrow">Hexgate Platform · Analyze</span>
         <h3>Hot and cold analysis</h3>
         <p>
-          The platform is where you write policies, watch agents live and review what they did afterwards. It flags
-          anomalies and suggests the policy changes that would stop them.
+          The platform is where you write policies, watch agents while they run and go back over what they did. It
+          flags unusual behavior and suggests policy changes to stop it.
         </p>
         <div className="chips">
           <span className="chip c-hot">Hot · live</span>
