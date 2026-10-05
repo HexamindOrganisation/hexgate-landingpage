@@ -13,7 +13,7 @@ export function Mark() {
   );
 }
 
-type Section = "how-it-works" | "roadmap" | "blog";
+type Section = "roadmap" | "blog";
 
 /** Sticky nav for sub-pages (always in its "scrolled" state). */
 export function SubNav({ current }: { current?: Section }) {
@@ -32,9 +32,7 @@ export function SubNav({ current }: { current?: Section }) {
         </div>
         <div className="nav-links">
           <Link href="/#governance">Capabilities</Link>
-          <Link href="/how-it-works" {...cur("how-it-works")}>
-            How it works
-          </Link>
+          <Link href="/#how-it-works">How it works</Link>
           <Link href="/roadmap" {...cur("roadmap")}>
             Roadmap
           </Link>
@@ -72,7 +70,7 @@ export function SiteFooter() {
           </Link>
           <div className="foot-links">
             <Link href="/">Home</Link>
-            <Link href="/how-it-works">How it works</Link>
+            <Link href="/#how-it-works">How it works</Link>
             <Link href="/roadmap">Roadmap</Link>
             <Link href="/blog">Blog</Link>
             <a href="https://github.com/HexamindOrganisation/hexgate" target="_blank" rel="noopener">

@@ -224,7 +224,7 @@ export default function ComparisonPage() {
           </div>
           <div className="nav-links">
             <Link href="/#governance">Capabilities</Link>
-            <Link href="/how-it-works">How it works</Link>
+            <Link href="/#how-it-works">How it works</Link>
             <Link href="/roadmap">Roadmap</Link>
             <Link href="/blog">Blog</Link>
             <a href="https://docs.hexgate.ai" target="_blank" rel="noopener">

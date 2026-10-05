@@ -178,9 +178,17 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${hankenGrotesk.variable} ${ibmPlexMono.variable}`}
     >
       <body>
+        {/* Arms the slide entrances before first paint. If the reveal script never runs, show everything after 2.5s. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "document.documentElement.classList.add('js-slides');setTimeout(function(){if(!window.__slides)document.documentElement.classList.remove('js-slides')},2500)",
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

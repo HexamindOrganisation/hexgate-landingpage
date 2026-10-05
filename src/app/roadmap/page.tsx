@@ -150,7 +150,7 @@ export default function RoadmapPage() {
           </div>
           <div className="nav-links">
             <Link href="/#governance">Capabilities</Link>
-            <Link href="/how-it-works">How it works</Link>
+            <Link href="/#how-it-works">How it works</Link>
             <Link href="/roadmap" aria-current="page">
               Roadmap
             </Link>
@@ -579,7 +579,7 @@ export default function RoadmapPage() {
             </Link>
             <div className="foot-links">
               <Link href="/">Home</Link>
-              <Link href="/how-it-works">How it works</Link>
+              <Link href="/#how-it-works">How it works</Link>
               <Link href="/roadmap">Roadmap</Link>
               <Link href="/blog">Blog</Link>
               <a href="https://github.com/HexamindOrganisation/hexgate" target="_blank" rel="noopener">

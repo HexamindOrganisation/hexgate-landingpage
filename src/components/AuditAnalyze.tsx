@@ -138,7 +138,7 @@ export function AuditAnalyze() {
   const denied = pts.reduce((s, q) => s + q.deny, 0);
 
   return (
-    <div className="aa" ref={rootRef}>
+    <div className="aa" ref={rootRef} data-stagger>
       <div className="console aa-feed" aria-label="Live policy decision stream">
         <div className="console-top">
           <div className="dots">
