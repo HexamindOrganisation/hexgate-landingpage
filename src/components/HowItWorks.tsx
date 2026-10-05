@@ -85,12 +85,12 @@ export function ArchDiagram() {
         <span className="arch-k">HEXGATE PLATFORM</span>
         <div className="arch-inner">
           <div className="arch-cell">
-            Hot
-            <small>real time</small>
+            Policy editor
+            <small>roles, rules, signed bundles</small>
           </div>
           <div className="arch-cell">
-            Cold
-            <small>after the fact</small>
+            Audit &amp; anomalies
+            <small>every decision, live and after</small>
           </div>
         </div>
         <span className="arch-note">
@@ -101,30 +101,57 @@ export function ArchDiagram() {
   );
 }
 
+/** The two halves of the product, each paired with what it does for you. */
 export function ComponentCards() {
   return (
-    <div className="features" data-stagger>
-      <article className="feat">
-        <span className="eyebrow">The Hexgate SDK · inside your agent</span>
-        <p style={{ marginTop: 14 }}>
-          The SDK wraps your agent and your application logic. It fetches policies from the platform,
-          enforces them on every step and reports each decision back. You keep your agent code as it is.
+    <div className="pillars" data-stagger>
+      <article className="pillar">
+        <span className="eyebrow">Hexgate SDK · Enforce</span>
+        <h3>Access control inside the agent</h3>
+        <p>
+          The SDK wraps your agent and checks every step against your policy, so each tool call is authorized before
+          it runs, for the user who asked, not just at login. You keep your agent code as it is.
         </p>
-        <p className="feat-meta">Compatible with OpenAI Agents SDK · LangChain · Google ADK · Pydantic AI</p>
-        <a className="feat-link" href="https://pypi.org/project/hexgate/" target="_blank" rel="noopener">
-          pypi.org/project/hexgate →
-        </a>
+        <div className="chips">
+          <span className="chip c-allow">allow</span>
+          <span className="chip c-deny">deny</span>
+          <span className="chip c-hold">approval</span>
+        </div>
+        <p className="pillar-meta">Works with OpenAI Agents SDK · LangChain · Google ADK · Pydantic AI</p>
+        <div className="pillar-links">
+          <a className="pillar-link" href="#loop">
+            How enforcement works →
+          </a>
+          <a className="pillar-link quiet" href="https://pypi.org/project/hexgate/" target="_blank" rel="noopener">
+            pypi.org/project/hexgate
+          </a>
+        </div>
       </article>
-      <article className="feat">
-        <span className="eyebrow">The Hexgate platform · your control center</span>
-        <p style={{ marginTop: 14 }}>
-          The platform is where you define policies, watch agents live and analyze their behavior over
-          time. It runs as SaaS or on-premise.
+      <article className="pillar alt">
+        <span className="eyebrow">Hexgate Platform · Analyze</span>
+        <h3>Hot and cold analysis</h3>
+        <p>
+          The platform is where you write policies, watch agents live and review what they did afterwards. It flags
+          anomalies and suggests the policy changes that would stop them.
         </p>
-        <p className="feat-meta">Open source · self-host or managed</p>
-        <a className="feat-link" href="https://github.com/HexamindOrganisation/hexgate" target="_blank" rel="noopener">
-          github.com/HexamindOrganisation/hexgate →
-        </a>
+        <div className="chips">
+          <span className="chip c-hot">Hot · live</span>
+          <span className="chip c-cold">Cold · after the fact</span>
+        </div>
+        <p className="pillar-meta">Open source · SaaS on Hexgate Cloud or on-premise</p>
+        <div className="pillar-links">
+          <a className="pillar-link" href="#audit">
+            How analysis works →
+          </a>
+          <a
+            className="pillar-link quiet"
+            href="https://github.com/HexamindOrganisation/hexgate"
+            target="_blank"
+            rel="noopener"
+          >
+            github.com/HexamindOrganisation/hexgate
+          </a>
+        </div>
       </article>
     </div>
   );

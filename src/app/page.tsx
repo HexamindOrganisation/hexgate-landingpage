@@ -582,7 +582,6 @@ function Nav() {
           <ByHexamind />
         </div>
         <div className="nav-links">
-          <a href="#governance">Capabilities</a>
           <a href="#how-it-works">How it works</a>
           <Link href="/roadmap">Roadmap</Link>
           <Link href="/blog">Blog</Link>
@@ -927,96 +926,38 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="block slide" id="governance">
+      <section className="block slide" id="how-it-works">
+        <span id="governance" className="anchor-alias" aria-hidden="true" />
         <span id="features" className="anchor-alias" aria-hidden="true" />
         <div className="wrap">
           <div className="sec-head">
             <span className="eyebrow">03 · The answer</span>
             <h2>Hexgate sits inside the&nbsp;agent.</h2>
-            <p>From inside, it sees what firewalls, guardrails and MCP gateways can&apos;t:</p>
-          </div>
-          <ul className="answers" data-stagger>
-            <li>
-              <span className="ahex" aria-hidden="true">✓</span>
-              <div>
-                <b>What the agent is meant to do</b>
-                <span>A deny-by-default policy for every agent, tool and MCP server.</span>
-              </div>
-            </li>
-            <li>
-              <span className="ahex" aria-hidden="true">✓</span>
-              <div>
-                <b>What&apos;s borderline, and what&apos;s out of bounds</b>
-                <span>Allow, approval or deny, decided on the call&apos;s actual arguments.</span>
-              </div>
-            </li>
-            <li>
-              <span className="ahex" aria-hidden="true">✓</span>
-              <div>
-                <b>The agent&apos;s goal, context and internal state</b>
-                <span>
-                  Rules on who asked, the turn and the clock: <code>role</code>, <code>turn.tokens</code>,{" "}
-                  <code>now.*</code>.
-                </span>
-              </div>
-            </li>
-          </ul>
-          <div className="pillars" data-stagger>
-            <article className="pillar">
-              <span className="eyebrow">Enforce</span>
-              <h3>Access control inside the agent</h3>
-              <p>
-                Hexgate checks every step the agent takes against your policy, so each tool call is
-                authorized before it runs, for the user who asked, not just at login.
-              </p>
-              <div className="chips">
-                <span className="chip c-allow">allow</span>
-                <span className="chip c-deny">deny</span>
-                <span className="chip c-hold">approval</span>
-              </div>
-              <Link className="pillar-link" href="#loop">
-                How enforcement works →
-              </Link>
-            </article>
-            <article className="pillar alt">
-              <span className="eyebrow">Analyze</span>
-              <h3>Hot and cold analysis</h3>
-              <p>
-                Live monitoring while agents run, and a deep review afterwards. Hexgate flags
-                anomalies in agent behavior and suggests the policy changes that would stop them.
-              </p>
-              <div className="chips">
-                <span className="chip c-hot">Hot · live</span>
-                <span className="chip c-cold">Cold · after the fact</span>
-              </div>
-              <Link className="pillar-link" href="#audit">
-                How analysis works →
-              </Link>
-            </article>
-          </div>
-          <div className="dims">
-            <p className="dims-label">One control layer for</p>
-            <div className="dims-row">
-              <span className="dim">Security</span>
-              <span className="dim">Integrity</span>
-              <span className="dim">Usage</span>
-              <span className="dim">Performance</span>
-              <span className="dim">Compliance</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="block slide" id="how-it-works">
-        <div className="wrap">
-          <div className="sec-head">
-            <span className="eyebrow">04 · How it works</span>
-            <h2>Hexgate = SDK + Platform.</h2>
             <p>
-              An SDK that runs inside your agents, and a platform that governs them. Both are open source; the platform
-              runs as SaaS on Hexgate Cloud or on your own infrastructure.
+              An SDK enforces every step from inside the agent; a platform watches, analyzes and lets you act. From
+              there, it sees what firewalls, guardrails and MCP gateways can&apos;t:
             </p>
           </div>
+          <ul className="answers slim" data-stagger>
+            <li>
+              <span className="ahex" aria-hidden="true">✓</span>
+              <span>
+                <b>What the agent is meant to do</b>, as a deny-by-default policy
+              </span>
+            </li>
+            <li>
+              <span className="ahex" aria-hidden="true">✓</span>
+              <span>
+                <b>What&apos;s borderline, and what&apos;s out of bounds</b>, decided on the real arguments
+              </span>
+            </li>
+            <li>
+              <span className="ahex" aria-hidden="true">✓</span>
+              <span>
+                <b>The agent&apos;s goal, context and internal state</b>, in the rules themselves
+              </span>
+            </li>
+          </ul>
           <ArchDiagram />
           <ComponentCards />
         </div>
@@ -1025,7 +966,7 @@ export default function Home() {
       <section className="block slide" id="loop">
         <div className="wrap">
           <div className="sec-head">
-            <span className="eyebrow">05 · The control loop</span>
+            <span className="eyebrow">04 · The control loop</span>
             <h2>Five steps, on every agent&nbsp;run.</h2>
             <p>
               Per-user authorization, enforced in-process from a signed WASM bundle on every tool call. Every decision
@@ -1039,7 +980,7 @@ export default function Home() {
       <section className="block slide" id="rules">
         <div className="wrap">
           <div className="sec-head">
-            <span className="eyebrow">06 · Context-aware rules</span>
+            <span className="eyebrow">05 · Context-aware rules</span>
             <h2>Rules that understand&nbsp;context.</h2>
             <p>A single policy can combine who is asking, what they&apos;re calling, the agent&apos;s state and the world around it:</p>
           </div>
@@ -1050,7 +991,7 @@ export default function Home() {
       <section className="block slide" id="code">
         <div className="wrap">
           <div className="sec-head">
-            <span className="eyebrow">07 · Quickstart</span>
+            <span className="eyebrow">06 · Quickstart</span>
             <h2>Wrap your agent in one line. Ship enforcement on day&nbsp;one.</h2>
             <p>
               No rewrite, no config object. Set a key, wrap the runner, and the same agent code gates
@@ -1145,7 +1086,7 @@ export default function Home() {
       <section className="block slide" id="audit">
         <div className="wrap">
           <div className="sec-head">
-            <span className="eyebrow">08 · Audit · analyze · act</span>
+            <span className="eyebrow">07 · Audit · analyze · act</span>
             <h2>See every decision. Catch what&apos;s off. Stop it in one&nbsp;click.</h2>
             <p>
               Every verdict streams to an append-only audit log with the rule behind it. Hexgate watches that stream,
@@ -1201,6 +1142,16 @@ export default function Home() {
                 Book a demo
               </a>
             </div>
+            <div className="dims">
+              <p className="dims-label">One control layer for</p>
+              <div className="dims-row">
+                <span className="dim">Security</span>
+                <span className="dim">Integrity</span>
+                <span className="dim">Usage</span>
+                <span className="dim">Performance</span>
+                <span className="dim">Compliance</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -1224,7 +1175,6 @@ export default function Home() {
                 PyPI
               </a>
               <a href="#frameworks">Frameworks</a>
-              <a href="#governance">Capabilities</a>
               <a href="#how-it-works">How it works</a>
               <Link href="/blog">Blog</Link>
               <a href="#faq">FAQ</a>
