@@ -725,7 +725,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="block slide" id="risk" style={{ paddingTop: 72 }}>
+      <section className="block slide" id="risk">
         <div className="wrap">
           <div className="sec-head">
             <span className="eyebrow">01 · The risk</span>
@@ -927,7 +927,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="block slide" id="governance" style={{ paddingTop: 16 }}>
+      <section className="block slide" id="governance">
         <span id="features" className="anchor-alias" aria-hidden="true" />
         <div className="wrap">
           <div className="sec-head">

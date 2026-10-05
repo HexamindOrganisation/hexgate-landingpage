@@ -4463,3 +4463,26 @@ ol.steps {
     transform: none;
   }
 }
+
+/* ---------- SLIDES: breathing room ---------- */
+section.block.slide {
+  padding-block: clamp(96px, 11vw, 156px);
+}
+section.block.slide + section.block.slide::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: min(var(--maxw), calc(100% - 56px));
+  height: 1px;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, transparent, var(--line-2) 20%, var(--line-2) 80%, transparent);
+}
+.slide .sec-head {
+  margin-bottom: clamp(40px, 5vw, 64px);
+}
+@media (max-width: 560px) {
+  section.block.slide {
+    padding-block: 88px;
+  }
+}
