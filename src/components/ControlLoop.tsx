@@ -1,5 +1,4 @@
-// The five-step control loop, shared by the home page (compact) and
-// /how-it-works (full, with a sentence per step).
+// The five-step control loop on the home page's "How it works" chapter.
 
 const LOOP = [
   { n: "01 / DEFINE", title: "Define", body: "You write deterministic rules for each agent, MCP server or tool.", tag: "PLATFORM" },
@@ -14,14 +13,14 @@ const LOOP = [
   { n: "05 / IMPROVE", title: "Improve", body: "The platform flags anomalies and suggests how to change your policies.", tag: "PLATFORM · COLD" },
 ];
 
-export function ControlLoop({ compact = false }: { compact?: boolean }) {
+export function ControlLoop() {
   return (
-    <ol className={`steps five${compact ? " compact" : ""}`}>
+    <ol className="steps five" data-stagger>
       {LOOP.map((s) => (
         <li className="step" key={s.n}>
           <div className="n">{s.n}</div>
           <h4>{s.title}</h4>
-          {compact ? null : <p>{s.body}</p>}
+          <p>{s.body}</p>
           <span className="step-tag">{s.tag}</span>
         </li>
       ))}

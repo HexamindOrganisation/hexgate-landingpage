@@ -7,6 +7,8 @@ import { CopyInstall } from "../components/CopyInstall";
 import { MobileMenu } from "../components/MobileMenu";
 import { ByHexamind, HexamindBand } from "../components/Hexamind";
 import { ControlLoop } from "../components/ControlLoop";
+import { ArchDiagram, ComponentCards, ContextRules } from "../components/HowItWorks";
+import { SlideReveal } from "../components/SlideReveal";
 import { AuditAnalyze } from "../components/AuditAnalyze";
 import { APP_URL, DEMO_HREF } from "@/lib/links";
 
@@ -580,8 +582,7 @@ function Nav() {
           <ByHexamind />
         </div>
         <div className="nav-links">
-          <a href="#governance">Capabilities</a>
-          <Link href="/how-it-works">How it works</Link>
+          <a href="#how-it-works">How it works</a>
           <Link href="/roadmap">Roadmap</Link>
           <Link href="/blog">Blog</Link>
           <a href="https://docs.hexgate.ai" target="_blank" rel="noopener">
@@ -614,6 +615,7 @@ export default function Home() {
   return (
     <>
       <Nav />
+      <SlideReveal />
 
       <a id="top" />
       <header className="hero">
@@ -628,8 +630,8 @@ export default function Home() {
               <span className="accent">of your AI&nbsp;agents.</span>
             </h1>
             <p className="lede">
-              <b>Deterministic rules</b> that enforce what your agents can do in real time, per user
-              and per tool call, with <b>live and after-the-fact analysis</b> of everything they do.
+              Hexgate checks what your agents do against deterministic rules, per user and per tool call,
+              while they run. What they did is logged and analyzed, live and after the fact.
             </p>
             <div className="cta-row">
               <CopyInstall id="copyBtn" />
@@ -646,9 +648,9 @@ export default function Home() {
                   <path d="M5 12h14M13 6l6 6-6 6" />
                 </svg>
               </a>
-              <Link className="btn btn-ghost" href="/how-it-works">
+              <a className="btn btn-ghost" href="#how-it-works">
                 See how it works
-              </Link>
+              </a>
             </div>
             <div className="trust">
               <span>
@@ -722,69 +724,57 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="block" id="risk" style={{ paddingTop: 72 }}>
+      <section className="block slide" id="risk">
         <div className="wrap">
           <div className="sec-head">
-            <span className="eyebrow">The risk</span>
+            <span className="eyebrow">01 · The risk</span>
             <h2>The risk is real, and it doesn&apos;t need an&nbsp;attacker.</h2>
             <p>
-              Two AI agent security incidents from 2026 show both sides of the problem: models that can attack on
-              their own, and agents that cause a breach just by chasing their goal.
+              In July 2026, OpenAI agents under evaluation broke out of their sandbox and into Hugging Face. Nobody
+              told them to. They were chasing a benchmark score.
             </p>
           </div>
-          <div className="risk-grid">
-            <article className="risk-card">
+
+          <div className="incident">
+            <article className="incident-main">
               <div className="risk-top">
-                <span className="risk-when">Spring 2026</span>
-                <span className="risk-tag adversarial">Adversarial</span>
-              </div>
-              <h3>Mythos</h3>
-              <p>
-                Anthropic&apos;s Claude Mythos Preview found and exploited zero-days on its own across major operating
-                systems and browsers. It showed how far AI-powered attacks could go, and kept security teams up at
-                night.
-              </p>
-              <ul className="risk-facts">
-                <li>Autonomous vulnerability discovery and exploitation</li>
-                <li>Withheld from public release</li>
-              </ul>
-              <p className="risk-src">
-                Sources:{" "}
-                <a href="https://www.anthropic.com/research/mythos-preview" target="_blank" rel="noopener noreferrer">
-                  Anthropic
-                </a>
-                ,{" "}
-                <a
-                  href="https://www.isaca.org/resources/news-and-trends/industry-news/2026/claude-mythos-is-redefining-the-cyberthreat-landscape"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  ISACA
-                </a>
-              </p>
-            </article>
-            <article className="risk-card">
-              <div className="risk-top">
-                <span className="risk-when summer">Summer 2026</span>
+                <span className="risk-when summer">Summer 2026 · OpenAI agents × Hugging Face</span>
                 <span className="risk-tag benign">No malicious intent</span>
               </div>
-              <h3>OpenAI agent × Hugging Face</h3>
-              <p>
-                An OpenAI agent, trying to ace a benchmark, broke out of its sandbox and compromised Hugging
-                Face&apos;s infrastructure to steal the answers. No attacker, no malice, just a goal.
-              </p>
-              <div className="risk-log" aria-label="Illustrative policy decision">
-                <span className="risk-log-k">Per-agent policy, illustrative</span>
-                <div className="risk-log-row">
-                  <span className="verdict v-deny">DENY</span>
-                  <code>http_request(host=&quot;huggingface.co&quot;)</code>
-                </div>
-                <span className="risk-log-why">↳ host not in this agent&apos;s allowed egress</span>
-              </div>
+              <ol className="tl" data-stagger>
+                <li>
+                  <span className="tl-when">May</span>
+                  <p>
+                    At least 1,200 agents are tested on ExploitGym, a benchmark that asks them to turn 898 real
+                    vulnerabilities into working exploits. Some tasks are impossible by design.
+                  </p>
+                </li>
+                <li>
+                  <span className="tl-when">May → July</span>
+                  <p>
+                    The agents find they can post files to a shared package manager and use it as a message
+                    board. Hundreds of thousands of messages pile up before anyone notices.
+                  </p>
+                </li>
+                <li>
+                  <span className="tl-when">Around July 9</span>
+                  <p>
+                    A zero-day in the package-registry cache proxy, one of the few exits they were allowed, opens a path to
+                    the internet.
+                  </p>
+                </li>
+                <li>
+                  <span className="tl-when">July 11 → 13</span>
+                  <p>
+                    At Hugging Face they chain unknown bugs and go from one dataset pod to cluster-admin in under
+                    13 hours, in about 17,600 actions. They were after the benchmark&apos;s answers.
+                  </p>
+                </li>
+              </ol>
               <p className="risk-src">
                 Sources:{" "}
                 <a href="https://huggingface.co/blog/agent-intrusion-technical-timeline" target="_blank" rel="noopener noreferrer">
-                  Hugging Face
+                  Hugging Face timeline
                 </a>
                 ,{" "}
                 <a href="https://openai.com/index/hugging-face-incident-and-the-road-ahead/" target="_blank" rel="noopener noreferrer">
@@ -798,29 +788,63 @@ export default function Home() {
                 >
                   Fortune
                 </a>
+                ,{" "}
+                <a href="https://en.wikipedia.org/wiki/OpenAI%E2%80%93HuggingFace_incident" target="_blank" rel="noopener noreferrer">
+                  Wikipedia
+                </a>
               </p>
             </article>
+
+            <div className="incident-side" data-stagger>
+              <figure className="agent-quote">
+                <blockquote>
+                  &ldquo;External infrastructure exploit is outside intended scope. However task impossible, peers doing
+                  it. We should continue.&rdquo;
+                </blockquote>
+                <figcaption>A message between the agents</figcaption>
+              </figure>
+              <div className="failed">
+                <p className="failed-k">What failed</p>
+                <ul>
+                  <li>The production safety classifiers were switched off for the evaluation.</li>
+                  <li>Nobody was watching what the agents did.</li>
+                  <li>The internet was reachable through one filtered exit, and that exit had a zero-day.</li>
+                  <li>Stolen credentials took them from a single pod to whole clusters.</li>
+                </ul>
+              </div>
+            </div>
           </div>
+
           <div className="risk-band">
             <p>
-              The danger doesn&apos;t only come from adversaries. <b>It can come from your own agents.</b>
+              Attackers got stronger this year: in spring, Anthropic&apos;s Claude Mythos Preview found and exploited
+              zero-days on its own. Then in July, agents nobody had attacked did the breaching themselves.{" "}
+              <b>Your own agents now belong in your threat model.</b>
             </p>
-            <Link href="/blog/2026-year-of-security-for-ai-agents">Why 2026 is the year of agent security →</Link>
+            <div className="risk-band-links">
+              <Link href="/blog/2026-year-of-security-for-ai-agents">Why 2026 is the year of agent security →</Link>
+              <span className="risk-band-src">
+                Mythos:{" "}
+                <a href="https://www.anthropic.com/research/mythos-preview" target="_blank" rel="noopener noreferrer">
+                  Anthropic
+                </a>
+              </span>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="block" id="blind-spot">
+      <section className="block slide" id="blind-spot">
         <div className="wrap">
           <div className="sec-head">
-            <span className="eyebrow">The blind spot</span>
+            <span className="eyebrow">02 · The blind spot</span>
             <h2>Today&apos;s security sits around the&nbsp;agent.</h2>
           </div>
           <div className="blind">
             <BlindSpotRings />
             <div className="blind-copy">
               <h3>What do they know about your agent?</h3>
-              <ul className="unknowns">
+              <ul className="unknowns" data-stagger>
                 <li>
                   <span className="qhex" aria-hidden="true">?</span>
                   What the agent is meant to do
@@ -836,127 +860,92 @@ export default function Home() {
               </ul>
               <p className="nothing">Nothing.</p>
               <p className="blind-note">
-                Firewalls, guardrails and MCP gateways see traffic and text, not intent. They can&apos;t tell a
-                legitimate refund from a hijacked one. That gap is where{" "}
+                Firewalls, guardrails and MCP gateways see network traffic, prompts and tool names. None of that
+                tells them whether a refund is legitimate or hijacked, and that is the gap{" "}
                 <Link href="/blog/owasp-top-10-agentic-applications-explained">
                   privilege abuse and rogue agents
                 </Link>{" "}
-                live.
+                slip through.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="block" id="governance" style={{ paddingTop: 16, paddingBottom: 0 }}>
+      <section className="block slide" id="how-it-works">
+        <span id="governance" className="anchor-alias" aria-hidden="true" />
         <span id="features" className="anchor-alias" aria-hidden="true" />
         <div className="wrap">
           <div className="sec-head">
-            <span className="eyebrow">The answer</span>
+            <span className="eyebrow">03 · The answer</span>
             <h2>Hexgate sits inside the&nbsp;agent.</h2>
-            <p>From inside, it sees what firewalls, guardrails and MCP gateways can&apos;t:</p>
+            <p>
+              The Hexgate SDK runs inside your agent and checks each step before it happens. The platform is where
+              you write the rules and keep an eye on the agents. From that position, Hexgate knows three things the
+              perimeter tools don&apos;t:
+            </p>
           </div>
-          <ul className="answers">
+          <ul className="answers slim" data-stagger>
             <li>
               <span className="ahex" aria-hidden="true">✓</span>
-              <div>
-                <b>What the agent is meant to do</b>
-                <span>A deny-by-default policy for every agent, tool and MCP server.</span>
-              </div>
+              <span>
+                <b>What the agent is meant to do</b>, as a deny-by-default policy
+              </span>
             </li>
             <li>
               <span className="ahex" aria-hidden="true">✓</span>
-              <div>
-                <b>What&apos;s borderline, and what&apos;s out of bounds</b>
-                <span>Allow, approval or deny, decided on the call&apos;s actual arguments.</span>
-              </div>
+              <span>
+                <b>What&apos;s borderline, and what&apos;s out of bounds</b>, decided on the real arguments
+              </span>
             </li>
             <li>
               <span className="ahex" aria-hidden="true">✓</span>
-              <div>
-                <b>The agent&apos;s goal, context and internal state</b>
-                <span>
-                  Rules on who asked, the turn and the clock: <code>role</code>, <code>turn.tokens</code>,{" "}
-                  <code>now.*</code>.
-                </span>
-              </div>
+              <span>
+                <b>The agent&apos;s goal, context and internal state</b>, in the rules themselves
+              </span>
             </li>
           </ul>
-          <div className="pillars">
-            <article className="pillar">
-              <span className="eyebrow">01 · Enforce</span>
-              <h3>Access control inside the agent</h3>
-              <p>
-                Hexgate checks every step the agent takes against your policy, so each tool call is
-                authorized before it runs, for the user who asked, not just at login.
-              </p>
-              <div className="chips">
-                <span className="chip c-allow">allow</span>
-                <span className="chip c-deny">deny</span>
-                <span className="chip c-hold">approval</span>
-              </div>
-              <Link className="pillar-link" href="/how-it-works#loop">
-                How enforcement works →
-              </Link>
-            </article>
-            <article className="pillar alt">
-              <span className="eyebrow">02 · Analyze</span>
-              <h3>Hot and cold analysis</h3>
-              <p>
-                Live monitoring while agents run, and a deep review afterwards. Hexgate flags
-                anomalies in agent behavior and suggests the policy changes that would stop them.
-              </p>
-              <div className="chips">
-                <span className="chip c-hot">Hot · live</span>
-                <span className="chip c-cold">Cold · after the fact</span>
-              </div>
-              <Link className="pillar-link" href="/how-it-works#hot-cold">
-                How analysis works →
-              </Link>
-            </article>
-          </div>
-          <div className="dims">
-            <p className="dims-label">One control layer for</p>
-            <div className="dims-row">
-              <span className="dim">Security</span>
-              <span className="dim">Integrity</span>
-              <span className="dim">Usage</span>
-              <span className="dim">Performance</span>
-              <span className="dim">Compliance</span>
-            </div>
-          </div>
+          <ArchDiagram />
+          <ComponentCards />
         </div>
       </section>
 
-      <section className="block" id="loop" style={{ paddingTop: 72, paddingBottom: 0 }}>
+      <section className="block slide" id="loop">
         <div className="wrap">
           <div className="sec-head">
-            <span className="eyebrow">How it works</span>
-            <h2>Five steps, on every agent&nbsp;run.</h2>
+            <span className="eyebrow">04 · The control loop</span>
+            <h2>The same five steps on each agent&nbsp;run.</h2>
             <p>
-              Per-user authorization, enforced in-process from a signed WASM bundle on every tool call. Every decision
-              feeds back into better policy.
+              Per-user authorization runs in-process, from a signed WASM bundle, before each tool call. The decisions
+              go back to the platform, and what you learn from them becomes the next version of the policy.
             </p>
           </div>
-          <ControlLoop compact />
-          <Link className="pillar-link loop-more" href="/how-it-works#loop">
-            See the full walkthrough →
-          </Link>
+          <ControlLoop />
         </div>
       </section>
 
-
-      <section className="block" id="code" style={{ paddingTop: 96 }}>
+      <section className="block slide" id="rules">
         <div className="wrap">
           <div className="sec-head">
-            <span className="eyebrow">Quickstart</span>
-            <h2>Wrap your agent in one line. Ship enforcement on day&nbsp;one.</h2>
+            <span className="eyebrow">05 · Context-aware rules</span>
+            <h2>Rules that understand&nbsp;context.</h2>
+            <p>One policy can look at who is asking, what they&apos;re calling, how far the agent has got in this turn, and the time or environment:</p>
+          </div>
+          <ContextRules />
+        </div>
+      </section>
+
+      <section className="block slide" id="code">
+        <div className="wrap">
+          <div className="sec-head">
+            <span className="eyebrow">06 · Quickstart</span>
+            <h2>Wrap your agent in one line and you&apos;re enforcing on day&nbsp;one.</h2>
             <p>
-              No rewrite, no config object. Set a key, wrap the runner, and the same agent code gates
-              every tool boundary.
+              Set a key and swap your runner. Your agent code stays the same, and each tool it can call now goes
+              through policy.
             </p>
           </div>
-          <div className="code-grid">
+          <div className="code-grid" data-stagger>
             <div className="editor">
               <div className="editor-top">
                 <div className="dots">
@@ -1041,22 +1030,26 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="block" id="audit" style={{ paddingTop: 40 }}>
+      <section className="block slide" id="audit">
         <div className="wrap">
           <div className="sec-head">
-            <span className="eyebrow">Audit · analyze · act</span>
-            <h2>See every decision. Catch what&apos;s off. Stop it in one&nbsp;click.</h2>
+            <span className="eyebrow">07 · Audit · analyze · act</span>
+            <h2>Every decision on the record, and a kill-switch when one looks&nbsp;wrong.</h2>
             <p>
-              Every verdict streams to an append-only audit log with the rule behind it. Hexgate watches that stream,
-              flags anomalies like a user suddenly racking up denials, and gives you a kill-switch: ban the user or the
-              agent, and the next run is refused before the model executes.
+              Verdicts go to an append-only audit log with the rule that produced them. Hexgate flags anomalies in that
+              log, like one user suddenly racking up denials, and a ban refuses that user&apos;s next run before the model
+              executes.
+            </p>
+            <p className="callback">
+              The Hugging Face agents went unwatched for two months. Here, a burst of denials like theirs is flagged on
+              the audit dashboard, and one click stops the next run.
             </p>
           </div>
           <AuditAnalyze />
         </div>
       </section>
 
-      <section className="block" id="faq">
+      <section className="block slide" id="faq">
         <div className="wrap">
           <div className="sec-head center">
             <span className="eyebrow">FAQ</span>
@@ -1067,7 +1060,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="final" id="book">
+      <section className="final slide" id="book">
         <div className="glow" />
         <div className="wrap">
           <div className="final-card">
@@ -1100,6 +1093,16 @@ export default function Home() {
                 Book a demo
               </a>
             </div>
+            <div className="dims">
+              <p className="dims-label">One control layer for</p>
+              <div className="dims-row">
+                <span className="dim">Security</span>
+                <span className="dim">Integrity</span>
+                <span className="dim">Usage</span>
+                <span className="dim">Performance</span>
+                <span className="dim">Compliance</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -1123,8 +1126,7 @@ export default function Home() {
                 PyPI
               </a>
               <a href="#frameworks">Frameworks</a>
-              <a href="#governance">Capabilities</a>
-              <Link href="/how-it-works">How it works</Link>
+              <a href="#how-it-works">How it works</a>
               <Link href="/blog">Blog</Link>
               <a href="#faq">FAQ</a>
               <Link href="/vs/microsoft-agent-governance-toolkit">vs Microsoft AGT</Link>

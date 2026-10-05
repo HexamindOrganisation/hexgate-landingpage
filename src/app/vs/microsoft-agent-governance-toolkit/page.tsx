@@ -223,8 +223,7 @@ export default function ComparisonPage() {
             <ByHexamind />
           </div>
           <div className="nav-links">
-            <Link href="/#governance">Capabilities</Link>
-            <Link href="/how-it-works">How it works</Link>
+            <Link href="/#how-it-works">How it works</Link>
             <Link href="/roadmap">Roadmap</Link>
             <Link href="/blog">Blog</Link>
             <a href="https://docs.hexgate.ai" target="_blank" rel="noopener">
@@ -552,7 +551,6 @@ export default function ComparisonPage() {
               <a href="https://pypi.org/project/hexgate/" target="_blank" rel="noopener">
                 PyPI
               </a>
-              <Link href="/#governance">Capabilities</Link>
               <Link href="/#faq">FAQ</Link>
             </div>
             <span className="foot-meta">
