@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Hanken_Grotesk, IBM_Plex_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { GoogleTagManager } from "@next/third-parties/google";
 import "./globals.css";
 
 const hankenGrotesk = Hanken_Grotesk({
@@ -181,6 +182,7 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${hankenGrotesk.variable} ${ibmPlexMono.variable}`}
     >
+      <GoogleTagManager gtmId="GTM-PJN7HVVH" />
       <body>
         {/* Arms the slide entrances before first paint. If the reveal script never runs, show everything after 2.5s. */}
         <script
