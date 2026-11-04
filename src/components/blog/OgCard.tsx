@@ -27,9 +27,9 @@ export function OgCard({ title, kicker, line, footer }: { title: string; kicker:
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <svg width="48" height="48" viewBox="0 0 32 32">
-            <path d="M16 2.5 27.5 9v14L16 29.5 4.5 23V9L16 2.5Z" stroke="#3b82f6" strokeWidth="1.6" fill="rgba(59,130,246,0.08)" />
-            <path d="M16 9.5 21.5 12.7v6.6L16 22.5 10.5 19.3v-6.6L16 9.5Z" stroke="#60a5fa" strokeWidth="1.4" fill="none" />
-            <circle cx="16" cy="16" r="2.1" fill="#60a5fa" />
+            <path d="M16 2.5 27.5 9v14L16 29.5 4.5 23V9L16 2.5Z" stroke="#3b82f6" strokeWidth="1.8" fill="rgba(59,130,246,0.14)" />
+            <circle cx="16" cy="13.6" r="2.7" stroke="#60a5fa" strokeWidth="1.7" fill="none" />
+            <path d="M14.4 15.9 13.4 21.6h5.2l-1-5.7" stroke="#60a5fa" strokeWidth="1.7" strokeLinejoin="round" fill="none" />
           </svg>
           <div style={{ display: "flex", fontSize: 38, fontWeight: 700, letterSpacing: "-0.02em" }}>
             <span style={{ color: "#f3f5f9" }}>Hex</span>
