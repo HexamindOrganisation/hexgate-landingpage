@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { MobileMenu } from "./MobileMenu";
 import { ByHexamind } from "./Hexamind";
-import { APP_URL } from "@/lib/links";
+import { APP_URL, DEMO_HREF } from "@/lib/links";
 
 export function Mark() {
   return (
@@ -45,6 +45,9 @@ export function SubNav({ current }: { current?: Section }) {
         <div className="nav-cta">
           <a className="btn btn-ghost" href="https://github.com/HexamindOrganisation/hexgate" target="_blank" rel="noopener">
             GitHub
+          </a>
+          <a className="btn btn-ghost nav-demo" href={DEMO_HREF} target="_blank" rel="noopener">
+            Book a demo
           </a>
           <a className="btn btn-primary" href={APP_URL}>
             Try the cloud version

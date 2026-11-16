@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { APP_URL } from "@/lib/links";
+import { APP_URL, DEMO_HREF } from "@/lib/links";
 
 const LINKS = [
   { href: "/#how-it-works", label: "How it works" },
@@ -66,6 +66,9 @@ export function MobileMenu() {
           </a>
           <a href="https://hexamind.ai" target="_blank" rel="noopener" onClick={close}>
             By Hexamind
+          </a>
+          <a className="btn btn-ghost" href={DEMO_HREF} target="_blank" rel="noopener" onClick={close}>
+            Book a demo
           </a>
           <a className="btn btn-primary" href={APP_URL} onClick={close}>
             Try the cloud version

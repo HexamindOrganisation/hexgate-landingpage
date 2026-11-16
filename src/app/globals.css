@@ -141,6 +141,7 @@ nav.site-nav.scrolled {
   gap: 30px;
 }
 .nav-links a {
+  white-space: nowrap;
   color: var(--tx-1);
   font-size: 15px;
   font-weight: 500;
@@ -2238,6 +2239,12 @@ footer {
   margin-top: 6px;
   width: 100%;
   justify-content: center;
+}
+/* Three nav buttons crowd the links on narrower desktops: drop GitHub, keep the demo CTA. */
+@media (max-width: 1080px) {
+  .nav-cta .btn-ghost:not(.nav-demo) {
+    display: none;
+  }
 }
 @media (max-width: 760px) {
   .mnav {
