@@ -3,7 +3,7 @@ import Link from "next/link";
 import { CopyInstall } from "../../components/CopyInstall";
 import { MobileMenu } from "../../components/MobileMenu";
 import { ByHexamind, HexamindBand } from "../../components/Hexamind";
-import { APP_URL, demoHref } from "@/lib/links";
+import { APP_URL, DEMO_HREF } from "@/lib/links";
 
 export const metadata: Metadata = {
   title: "Roadmap | Hexgate",
@@ -557,7 +557,7 @@ export default function RoadmapPage() {
                   <path d="M5 12h14M13 6l6 6-6 6" />
                 </svg>
               </a>
-              <a className="btn btn-ghost" href={demoHref("Hexgate roadmap walkthrough")}>
+              <a className="btn btn-ghost" href={DEMO_HREF} target="_blank" rel="noopener">
                 Book a demo
               </a>
             </div>
