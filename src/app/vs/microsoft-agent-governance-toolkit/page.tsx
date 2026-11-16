@@ -239,6 +239,9 @@ export default function ComparisonPage() {
             >
               GitHub
             </a>
+            <a className="btn btn-ghost nav-demo" href={DEMO_HREF} target="_blank" rel="noopener">
+              Book a demo
+            </a>
             <a className="btn btn-primary" href={APP_URL}>
               Try the cloud version
             </a>
